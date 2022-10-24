@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <title>Welcome to <%=shopName%></title>
+        <link rel="stylesheet"  type="text/css" href="main.css" />
+    </head>
+    <style>
+        table#userlist_table tr:nth-child(even) { background-color:#dddddd;} 
+        table#userlist_table {width: 100%; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;}
+    </style>
+    <body>
+        <h1><%=shopName%> Shop</h1>
+        <h2>Here are the users of <%=shopName%>:</h2>
+        
+        <label for="users">Select User for Deletion:</label>
+        <select name="users" id="users">
+            <% registeredUsers.forEach(function(user) { %>
+            <option value="user"><%= user.Username %></option>
+            <% }) %>
+        </select>
+        <button>Submit</button>
+        </body>
+    </html>
