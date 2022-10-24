@@ -122,37 +122,35 @@ module.exports = function(app, shopData) {
         res.render('login.ejs', shopData);                                                                     
     });
     app.post('/loggedin', function (req,res) {
-        const bcrypt = require('bcrypt');        
-        
-        // Retreiving Hashed Password from database
-        let sqlquery = "SELECT hashedpassword FROM users WHERE username = ?";
-        // execute sql query
-        db.query(sqlquery, (err, result) => {
-            if (err) {
-                return console.error(err.message);
-            }
-            else
-            var hashedPassword = result;
+            // Password Hashing
+            const bcrypt = require('bcrypt');
+
+            let hashedPassword = "SELECT HashedPassword FROM users WHERE Username = ?";
+            db.query(hashedPassword, (err, result) => {
+                if(err){
+                    res.redirect('./')
+                }else{
+                    result = hashedPassword;
+                }
+            })
+            console.log(hashedPassword);
             
             // Compare the password supplied with the password in the database
             bcrypt.compare(req.body.password, hashedPassword, function(err, result) {
                 if (err) {
                     // TODO: Handle error
-                    res.redirect('./');
-                    console.error(err.message);
+                    console.log('SQL Error')
                 }
                 else if (result == true) {
                     // TODO: Send message
-                    console.error('Logged In');
+                    console.log('Logged In');
                 }
                 else {
                     // TODO: Send message
-                    res.send('Incorrect Password!');
-                    console.log('Incorrect Username or Password')
+                    console.log('Wrong Password or Username');
                 }
             });
         });
-    });
 
     //Delete Users Page -----------------------------------------------------------------------
     app.get('/deleteuser', function(req, res) {
