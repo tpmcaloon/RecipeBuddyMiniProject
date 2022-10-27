@@ -1,12 +1,12 @@
 module.exports = function(app, shopData) {
-
+    
     // Handle our routes
-
+    
     //Index Page -----------------------------------------------------------------------
     app.get('/',function(req,res){
         res.render('index.ejs', shopData)
     });
-
+    
     //About Page -----------------------------------------------------------------------
     app.get('/about',function(req,res){
         res.render('about.ejs', shopData);
@@ -115,55 +115,79 @@ module.exports = function(app, shopData) {
             console.log(newData)
             res.render("bargains.ejs", newData)
         });
-    });
+    }); 
 
     //Login + Logged In Page -----------------------------------------------------------------------
     app.get('/login', function (req,res) {
         res.render('login.ejs', shopData);                                                                     
     });
     app.post('/loggedin', function (req,res) {
-            // Password Hashing
-            const bcrypt = require('bcrypt');
+        const bcrypt = require('bcrypt');
+        const username = req.body.username;
+        const password = req.body.password;
 
-            let hashedPassword = "SELECT HashedPassword FROM users WHERE Username = ?";
-            db.query(hashedPassword, (err, result) => {
-                if(err){
-                    res.redirect('./')
-                }else{
-                    result = hashedPassword;
-                }
-            })
-            console.log(hashedPassword);
+        //Checking Username Within Database
+        let checkUsernameSQL = "SELECT Username FROM users WHERE Username = '" + username + "'";
+        db.query(checkUsernameSQL, (err, result) => {
+            if (err) {
+                // TODO: Handle error
+                res.redirect('./');
+                res.send('Incorrect Username');
+                console.log('SQL Query Error')
+            }
+            let checkedUsername = result[0].Username
+            console.log(checkedUsername)
             
-            // Compare the password supplied with the password in the database
-            bcrypt.compare(req.body.password, hashedPassword, function(err, result) {
+            //Getting Hashed Password From Database
+            let hashedPasswordSQL = "SELECT HashedPassword FROM users WHERE Username = '" + username + "'";
+            db.query(hashedPasswordSQL, (err, result) => {
                 if (err) {
                     // TODO: Handle error
-                    console.log('SQL Error')
+                    res.redirect('./'); 
+                    console.log('SQL Query Error')
                 }
-                else if (result == true) {
-                    // TODO: Send message
-                    console.log('Logged In');
-                }
-                else {
-                    // TODO: Send message
-                    console.log('Wrong Password or Username');
-                }
+                let hashedPassword = result[0].HashedPassword
+                console.log(hashedPassword)
+                
+                // Compare the password supplied with the password in the database
+                bcrypt.compare(password, hashedPassword, function(err, result) {
+                    if (err) {
+                            // TODO: Handle error
+                            res.redirect('./'); 
+                            console.log('SQL Error')
+                        }
+                        else if (result == true) {
+                            // TODO: Send message
+                            res.send('Logged In');
+                            console.log('Logged In');
+                        }
+                        else {
+                            // TODO: Send message
+                            res.send('Wrong Password or Username');
+                            console.log('Wrong Password or Username');
+                        }
+                    });
+                });
             });
         });
 
-    //Delete Users Page -----------------------------------------------------------------------
-    app.get('/deleteuser', function(req, res) {
-        let sqlquery = "SELECT * FROM users"; // query database to get all the users
-        let sqldeletequery = "DELETE FROM users WHERE Username = ?"
-        // execute sql query
-        db.query(sqlquery, (err, result) => {
-            if (err) {
-                res.redirect('./'); 
-            }
-            let newData = Object.assign({}, shopData, {registeredUsers:result});
-            console.log(newData)
-            res.render("deleteuser.ejs", newData)
+        //Delete Users Page -----------------------------------------------------------------------
+        app.get('/deleteuser', function (req,res) {
+            res.render('deleteuser.ejs', shopData);                                                                     
         });
-    });
-}
+        app.post('/deleteduser', function (req,res) {
+            //SQL to delete a User based on what the User typed
+            let deleteUserSQL = "DELETE FROM users WHERE Username = '" + req.body.username + "'";
+            console.log(deleteUserSQL)
+            db.query(deleteUserSQL, (err, result) => {
+                if (err) {
+                    // TODO: Handle error
+                    console.log('SQL Query Error')
+                }
+                let deleteuser = result
+                console.log(deleteuser)
+                res.send('User: (' + req.body.username + ') was successfully deleted');
+                        console.log('User Delete Successful');
+            });
+        });
+    }

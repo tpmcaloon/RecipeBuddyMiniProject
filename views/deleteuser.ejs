@@ -11,13 +11,10 @@
     <body>
         <h1><%=shopName%> Shop</h1>
         <h2>Here are the users of <%=shopName%>:</h2>
-        
-        <label for="users">Select User for Deletion:</label>
-        <select name="users" id="users">
-            <% registeredUsers.forEach(function(user) { %>
-            <option value="user"><%= user.Username %></option>
-            <% }) %>
-        </select>
-        <button>Submit</button>
+        <form method="POST" action="/deleteduser">
+            <label for="users">Select User for Deletion:</label>
+            <p>Username: <input id="username" type="text" name="username" placeholder="Username..." required/></p>      
+                <input type="submit" value="Submit" />
+            </form>
         </body>
     </html>
