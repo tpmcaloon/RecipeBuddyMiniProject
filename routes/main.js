@@ -1,5 +1,11 @@
 module.exports = function(app, shopData) {
     
+    const redirectLogin = (req, res, next) => {
+        if (!req.session.userId ) {
+        res.redirect('./login')
+        } else { next (); }
+        }
+        
     // Handle our routes
     
     //Index Page -----------------------------------------------------------------------
@@ -8,12 +14,12 @@ module.exports = function(app, shopData) {
     });
     
     //About Page -----------------------------------------------------------------------
-    app.get('/about',function(req,res){
+    app.get('/about', redirectLogin,function(req,res){
         res.render('about.ejs', shopData);
     });
 
     //Search + Search Results Page -----------------------------------------------------------------------
-    app.get('/search',function(req,res){
+    app.get('/search', redirectLogin,function(req,res){
         res.render("search.ejs", shopData);
     });
     app.get('/search-result', function (req, res) {
@@ -32,7 +38,7 @@ module.exports = function(app, shopData) {
     });
 
     //Register + Registered Page -----------------------------------------------------------------------
-    app.get('/register', function (req,res) {
+    app.get('/register', redirectLogin, function (req,res) {
         res.render('register.ejs', shopData);                                                                     
     });                                                                                                 
     app.post('/registered', function (req,res) {
@@ -59,7 +65,7 @@ module.exports = function(app, shopData) {
     });
 
     //List Books Page -----------------------------------------------------------------------
-    app.get('/list', function(req, res) {
+    app.get('/list', redirectLogin, function(req, res) {
         let sqlquery = "SELECT * FROM books"; // query database to get all the books
         // execute sql query
         db.query(sqlquery, (err, result) => {
@@ -73,7 +79,7 @@ module.exports = function(app, shopData) {
     });
 
     //List Users Page -----------------------------------------------------------------------
-    app.get('/listusers', function(req, res) {
+    app.get('/listusers', redirectLogin, function(req, res) {
         let sqlquery = "SELECT * FROM users"; // query database to get all the books
         // execute sql query
         db.query(sqlquery, (err, result) => {
@@ -87,7 +93,7 @@ module.exports = function(app, shopData) {
     });
 
     //Add Book + Book Added Page -----------------------------------------------------------------------
-    app.get('/addbook', function (req, res) {
+    app.get('/addbook', redirectLogin, function (req, res) {
         res.render('addbook.ejs', shopData);
     });
     app.post('/bookadded', function (req,res) {
@@ -105,7 +111,7 @@ module.exports = function(app, shopData) {
     });
 
     //Bargain Books Page -----------------------------------------------------------------------
-    app.get('/bargainbooks', function(req, res) {
+    app.get('/bargainbooks', redirectLogin, function(req, res) {
         let sqlquery = "SELECT * FROM books WHERE price < 20";
         db.query(sqlquery, (err, result) => {
             if (err) {
@@ -157,7 +163,8 @@ module.exports = function(app, shopData) {
                             console.log('SQL Error')
                         }
                         else if (result == true) {
-                            // TODO: Send message
+                            // Save user session here, when login is successful
+                            req.session.userId = req.body.username;
                             res.send('Logged In');
                             console.log('Logged In');
                         }
@@ -171,8 +178,17 @@ module.exports = function(app, shopData) {
             });
         });
 
+        app.get('/logout', redirectLogin, (req,res) => {
+            req.session.destroy(err => {
+            if (err) {
+            return res.redirect('./')
+            }
+            res.send('you are now logged out. <a href='+'./'+'>Home</a>');
+        })
+    });
+
         //Delete Users Page -----------------------------------------------------------------------
-        app.get('/deleteuser', function (req,res) {
+        app.get('/deleteuser', redirectLogin, function (req,res) {
             res.render('deleteuser.ejs', shopData);                                                                     
         });
         app.post('/deleteduser', function (req,res) {
