@@ -1,5 +1,7 @@
 module.exports = function(app, shopData) {
     
+    const { check, validationResult } = require('express-validator');
+    
     const redirectLogin = (req, res, next) => {
         if (!req.session.userId ) {
         res.redirect('./login')
@@ -38,11 +40,15 @@ module.exports = function(app, shopData) {
     });
 
     //Register + Registered Page -----------------------------------------------------------------------
-    app.get('/register', redirectLogin, function (req,res) {
+    app.get('/register', function (req,res) {
         res.render('register.ejs', shopData);                                                                     
     });                                                                                                 
-    app.post('/registered', function (req,res) {
-        // Password Hashing
+    app.post('/registered', [check('email').isEmail()], function (req, res) {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+        res.redirect('./register'); }
+        else {
+            // Password Hashing
         const bcrypt = require('bcrypt');
         const saltRounds = 10;
         const plainPassword = req.body.password;
@@ -62,7 +68,7 @@ module.exports = function(app, shopData) {
             res.send(result);
             })
         })
-    });
+    }});
 
     //List Books Page -----------------------------------------------------------------------
     app.get('/list', redirectLogin, function(req, res) {
@@ -178,6 +184,7 @@ module.exports = function(app, shopData) {
             });
         });
 
+        //Logout Page -----------------------------------------------------------------------
         app.get('/logout', redirectLogin, (req,res) => {
             req.session.destroy(err => {
             if (err) {
