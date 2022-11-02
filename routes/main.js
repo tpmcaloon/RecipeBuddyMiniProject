@@ -4,10 +4,12 @@ module.exports = function(app, shopData) {
     
     const redirectLogin = (req, res, next) => {
         if (!req.session.userId ) {
-        res.redirect('./login')
-        } else { next (); }
+            res.redirect('./login')
         }
-        
+        else{
+            next (); }
+        }
+
     // Handle our routes
     
     //Index Page -----------------------------------------------------------------------
@@ -38,38 +40,46 @@ module.exports = function(app, shopData) {
             res.render("list.ejs", newData)
         });        
     });
-
+    
     //Register + Registered Page -----------------------------------------------------------------------
     app.get('/register', function (req,res) {
         res.render('register.ejs', shopData);                                                                     
     });                                                                                                 
-    app.post('/registered', [check('email').isEmail()], function (req, res) {
+    app.post('/registered', 
+    [check('email', 'Your email is not valid').not().isEmpty()], 
+    [check('password', 'The password must be 8+ chars long and contain a number')
+    .not()
+    .isIn(['123', 'password', 'god'])
+    .withMessage('Do not use a common word as the password')
+    .isLength({ min: 8 })
+    .matches(/\d/)],
+    function (req, res) {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-        res.redirect('./register'); }
-        else {
-            // Password Hashing
-        const bcrypt = require('bcrypt');
-        const saltRounds = 10;
-        const plainPassword = req.body.password;
-
-        // saving data in database
-        bcrypt.hash(plainPassword, saltRounds, function(err, hashedPassword) {
-            let sqlquery = "INSERT INTO users (username, firstname, lastname, email, hashedpassword) VALUES (?, ?, ?, ?, ?)";
-            let newrecord = [req.body.username, req.body.firstname, req.body.lastname, req.body.email, hashedPassword];
-            
-            db.query(sqlquery, newrecord, (err, result) => {
-            if (err) {
-                return console.error(err.message);
+            res.redirect('./register'); 
             }
-            else
-            var result = 'Hello '+ req.body.firstname + ' '+ req.body.lastname +' you are now registered! We will send an email to you at ' + req.body.email;
-            result += ' Your password is: '+ req.body.password +' and your hashed password is: '+ hashedPassword;
-            res.send(result);
-            })
-        })
-    }});
-
+            else {
+                // Password Hashing
+                const bcrypt = require('bcrypt');
+                const saltRounds = 10;
+                const plainPassword = req.sanitize(req.body.password);
+                // saving data in database
+                bcrypt.hash(plainPassword, saltRounds, function(err, hashedPassword) {
+                    let sqlquery = "INSERT INTO users (username, firstname, lastname, email, hashedpassword) VALUES (?, ?, ?, ?, ?)";
+                    let newrecord = [req.sanitize(req.body.username), req.sanitize(req.body.firstname), req.sanitize(req.body.lastname), req.sanitize(req.body.email), hashedPassword];
+                    db.query(sqlquery, newrecord, (err, result) => {
+                        if (err) {
+                            return console.error(err.message);
+                        }
+                        else
+                        var result = 'Hello '+ req.sanitize(req.body.firstname) + ' '+ req.sanitize(req.body.lastname) +' you are now registered! We will send an email to you at ' + req.sanitize(req.body.email);
+                        result += ' Your password is: '+ req.sanitize(req.body.password) +' and your hashed password is: '+ hashedPassword;
+                        res.send(result);
+                    })
+                })
+            }
+        });
+        
     //List Books Page -----------------------------------------------------------------------
     app.get('/list', redirectLogin, function(req, res) {
         let sqlquery = "SELECT * FROM books"; // query database to get all the books
@@ -99,20 +109,22 @@ module.exports = function(app, shopData) {
     });
 
     //Add Book + Book Added Page -----------------------------------------------------------------------
-    app.get('/addbook', redirectLogin, function (req, res) {
+    app.get('/addbook', redirectLogin,
+    [check('price', 'Must be an Integer').isInt()], 
+    function (req, res) {
         res.render('addbook.ejs', shopData);
     });
     app.post('/bookadded', function (req,res) {
         // saving data in database
         let sqlquery = "INSERT INTO books (name, price) VALUES (?,?)";
         // execute sql query
-        let newrecord = [req.body.name, req.body.price];
+        let newrecord = [req.sanitize(req.body.name), req.sanitize(req.body.price)];
         db.query(sqlquery, newrecord, (err, result) => {
             if (err) {
                 return console.error(err.message);
             }
             else
-            res.send(' This book is added to database, name: '+ req.body.name + ' price '+ req.body.price);
+            res.send(' This book is added to database, name: '+ req.sanitize(req.body.name) + ' price '+ req.sanitize(req.body.price));
         });
     });
 
@@ -135,8 +147,8 @@ module.exports = function(app, shopData) {
     });
     app.post('/loggedin', function (req,res) {
         const bcrypt = require('bcrypt');
-        const username = req.body.username;
-        const password = req.body.password;
+        const username = req.sanitize(req.body.username);
+        const password = req.sanitize(req.body.password);
 
         //Checking Username Within Database
         let checkUsernameSQL = "SELECT Username FROM users WHERE Username = '" + username + "'";
@@ -170,7 +182,7 @@ module.exports = function(app, shopData) {
                         }
                         else if (result == true) {
                             // Save user session here, when login is successful
-                            req.session.userId = req.body.username;
+                            req.session.userId = req.sanitize(req.body.username);
                             res.send('Logged In');
                             console.log('Logged In');
                         }
@@ -200,7 +212,7 @@ module.exports = function(app, shopData) {
         });
         app.post('/deleteduser', function (req,res) {
             //SQL to delete a User based on what the User typed
-            let deleteUserSQL = "DELETE FROM users WHERE Username = '" + req.body.username + "'";
+            let deleteUserSQL = "DELETE FROM users WHERE Username = '" + req.sanitize(req.body.username) + "'";
             console.log(deleteUserSQL)
             db.query(deleteUserSQL, (err, result) => {
                 if (err) {
@@ -209,7 +221,7 @@ module.exports = function(app, shopData) {
                 }
                 let deleteuser = result
                 console.log(deleteuser)
-                res.send('User: (' + req.body.username + ') was successfully deleted');
+                res.send('User: (' + req.sanitize(req.body.username) + ') was successfully deleted');
                         console.log('User Delete Successful');
             });
         });

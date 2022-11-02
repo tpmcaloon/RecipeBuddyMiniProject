@@ -5,6 +5,7 @@ var bodyParser= require ('body-parser')
 const mysql = require('mysql');
 var session = require ('express-session');
 var validator = require ('express-validator');
+const expressSanitizer = require('express-sanitizer');
 
 // Create the express application object
 const app = express()
@@ -20,6 +21,9 @@ app.use(session({
     expires: 600000
     }
     }));
+
+    // Create an input sanitizer
+app.use(expressSanitizer());
 
 // Set up css
 app.use(express.static(__dirname + '/public'));
