@@ -5,17 +5,26 @@
         <link rel="stylesheet"  type="text/css" href="main.css" />
     </head>
     <style>
-        table#userlist_table tr:nth-child(even) { background-color:#dddddd;} 
+        table#userlist_table tr:nth-child(even) { background-color:rgba(255, 68, 0, 0.66); color:#fff;} 
         table#userlist_table {width: 100%; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;}
     </style>
     <body>
+        <!-- Horizontal Navbar -->
+        <ul>
+            <li><a href="./">Home</a></li>
+            <li><a href="./search">Search</a></li>
+            <li><a href="./addbook">Add Book</a></li>
+            <li><a href="./list">List Books</a></li>
+            <li><a href="./bargains">Bargains</a></li>
+            <li><a href="./register">Register</a></li>
+            <li><a href="./listusers">List Users</a></li>
+            <li><a href="./deleteuser">Delete Users</a></li>
+            <li><a href="./login">Login</a></li>
+        </ul>
+        <!-- Horizontal Navbar -->
+
         <h1><%=shopName%> Shop</h1>
         <h2>Here are the users of <%=shopName%>:</h2>
-        <ul>
-            <% registeredUsers.forEach(function(user) { %>
-                <li><%= user.Username %>, <%=user.FirstName %>, <%=user.LastName %>, <%=user.Email %></li>
-                <% }) %>
-            </ul>
 
             <!-- Table View of Users -->
             <table id="userlist_table"> 
@@ -36,3 +45,10 @@
             </table>
         </body>
     </html>
+
+    <!-- Original Code
+    <ul>
+    <% registeredUsers.forEach(function(user) { %>
+        <li><%= user.Username %>, <%=user.FirstName %>, <%=user.LastName %>, <%=user.Email %></li>
+        <% }) %>
+    </ul> -->

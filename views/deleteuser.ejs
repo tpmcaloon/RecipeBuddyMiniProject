@@ -9,12 +9,30 @@
         table#userlist_table {width: 100%; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;}
     </style>
     <body>
+        <!-- Horizontal Navbar -->
+        <ul>
+            <li><a href="./">Home</a></li>
+            <li><a href="./search">Search</a></li>
+            <li><a href="./addbook">Add Book</a></li>
+            <li><a href="./list">List Users</a></li>
+            <li><a href="./bargains">Bargains</a></li>
+            <li><a href="./register">Register</a></li>
+            <li><a href="./listusers">List Users</a></li>
+            <li><a href="./deleteuser">Delete Users</a></li>
+            <li><a href="./login">Login</a></li>
+        </ul>
+        <!-- Horizontal Navbar -->
+
         <h1><%=shopName%> Shop</h1>
         <h2>Here are the users of <%=shopName%>:</h2>
+
+        <!-- Delete User Form -->
         <form method="POST" action="/deleteduser">
             <label for="users">Select User for Deletion:</label>
             <p>Username: <input id="username" type="text" name="username" placeholder="Username..." required/></p>      
-                <input type="submit" value="Submit" />
-            </form>
+            <input type="submit" value="Submit" />
+        </form>
+        <!-- Delete User Form -->
+        
         </body>
     </html>
