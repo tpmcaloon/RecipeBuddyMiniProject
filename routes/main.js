@@ -73,7 +73,7 @@ module.exports = function(app, shopData) {
                         }
                         else
                         var result = 'Hello '+ req.sanitize(req.body.firstname) + ' '+ req.sanitize(req.body.lastname) +' you are now registered! We will send an email to you at ' + req.sanitize(req.body.email);
-                        result += ' Your password is: '+ req.sanitize(req.body.password) +' and your hashed password is: '+ hashedPassword;
+                        result += ' Your password is: '+ req.sanitize(req.body.password) +' and your hashed password is: '+ hashedPassword + ' <a href='+'./'+'>Home</a>';
                         res.send(result);
                     })
                 })
