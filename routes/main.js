@@ -124,7 +124,7 @@ module.exports = function(app, shopData) {
                 return console.error(err.message);
             }
             else
-            res.send(' This book is added to database, name: '+ req.sanitize(req.body.name) + ' price '+ req.sanitize(req.body.price));
+            res.send(' This book is added to database, name: '+ req.sanitize(req.body.name) + ' price '+ req.sanitize(req.body.price) + '. <a href='+'./'+'>Home</a>');
         });
     });
 
@@ -145,7 +145,14 @@ module.exports = function(app, shopData) {
     app.get('/login', function (req,res) {
         res.render('login.ejs', shopData);                                                                     
     });
-    app.post('/loggedin', function (req,res) {
+    app.post('/loggedin', 
+    [check('password', 'The password must be 8+ chars long and contain a number')
+    .not()
+    .isIn(['123', 'password', 'god'])
+    .withMessage('Do not use a common word as the password')
+    .isLength({ min: 8 })
+    .matches(/\d/)],
+    function (req,res) {
         const bcrypt = require('bcrypt');
         const username = req.sanitize(req.body.username);
         const password = req.sanitize(req.body.password);
@@ -183,12 +190,12 @@ module.exports = function(app, shopData) {
                         else if (result == true) {
                             // Save user session here, when login is successful
                             req.session.userId = req.sanitize(req.body.username);
-                            res.send('Logged In');
+                            res.send('Logged In <a href='+'./'+'>Home</a>');
                             console.log('Logged In');
                         }
                         else {
                             // TODO: Send message
-                            res.send('Wrong Password or Username');
+                            res.send('Wrong Password or Username.  <a href='+'./'+'>Home</a>');
                             console.log('Wrong Password or Username');
                         }
                     });
@@ -221,7 +228,7 @@ module.exports = function(app, shopData) {
                 }
                 let deleteuser = result
                 console.log(deleteuser)
-                res.send('User: (' + req.sanitize(req.body.username) + ') was successfully deleted');
+                res.send('User: (' + req.sanitize(req.body.username) + ') was successfully deleted. <a href='+'./'+'>Home</a>');
                         console.log('User Delete Successful');
             });
         });

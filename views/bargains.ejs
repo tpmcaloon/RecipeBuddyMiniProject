@@ -3,14 +3,52 @@
   <head>
     <title>Welcome to <%=shopName%></title>
     <link rel="stylesheet"  type="text/css" href="main.css" />
+    
+    <style>
+    table#booklist_table tr:nth-child(even) { background-color:rgba(255, 68, 0, 0.66); color:#fff;} 
+    table#booklist_table {width: 50%; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;}
+    </style>
+
   </head>
   <body>
+    <!-- Horizontal Navbar -->
+    <ul>
+      <li><a href="./">Home</a></li>
+      <li><a href="./search">Search</a></li>
+      <li><a href="./addbook">Add Book</a></li>
+      <li><a href="./list">List Books</a></li>
+      <li><a href="./bargains">Bargains</a></li>
+      <li><a href="./register">Register</a></li>
+      <li><a href="./listusers">List Users</a></li>
+      <li><a href="./deleteuser">Delete Users</a></li>
+      <li><a href="./login">Login</a></li>
+    </ul>
+    <!-- Horizontal Navbar -->
+    
     <h1><%=shopName%> Shop</h1>
     <h2>Here are our bargain books:</h2>
+
+    <!-- Table View of Bargain Books -->
+    <table id="booklist_table"> 
+      <tr>
+          <th>Book Name</th>
+          <th>Price</th>
+      </tr>
+      <% availableBooks.forEach(function(book) { %>
+        <tr style="text-align: center;">
+          <td><%= book.name %></td>
+          <td>£<%= book.price %></td>
+          <% }) %>
+      </tr>
+  </table>
+  <!-- Table View of BargainBooks -->
+
+    </body>
+</html>
+
+<!-- Original Code
     <ul>
       <% availableBooks.forEach(function(book) { %>
         <li><%= book.name %>, £<%=book.price%> </li>
       <% }) %>
-    </ul>
-    </body>
-</html>
+    </ul> -->
