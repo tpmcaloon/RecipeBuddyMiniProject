@@ -232,4 +232,58 @@ module.exports = function(app, shopData) {
                         console.log('User Delete Successful');
             });
         });
+
+        //Weather Page -----------------------------------------------------------------------
+        app.get('/weather', redirectLogin, function (req,res) {
+            res.render('weather.ejs', shopData);                                                                     
+        });
+        //Weather Dashboard Page -----------------------------------------------------------------------
+        app.post('/weather-search', function (req,res) {
+            const request = require('request');
+            let apiKey = 'd63a0764afba7442fce4d347e40f6084';
+            let city = req.body.city;
+            let url =`http://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`
+            request(url, function (err, response, body) {
+                if(err){
+                    console.log('error:', error);
+                } else {
+                    
+                    var weather = JSON.parse(body)
+                    if (weather!==undefined && weather.main!==undefined) {
+                    let weatherTemp = `${weather.main.temp}`,
+                    weatherPressure = `${weather.main.pressure}`,
+                    /* you will fetch the weather icon and its size using the icon data*/
+                    weatherTimezone = `${new Date(weather.dt * 1000 - weather.timezone * 1000)}`;
+                    weatherIcon = `http://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`,
+                    weatherDescription = `${weather.weather[0].description}`,
+                    humidity = `${weather.main.humidity}`,
+                    clouds = `${weather.clouds.all}`,
+                    visibility = `${weather.visibility}`,
+                    main = `${weather.weather[0].main}`,
+                    weatherFahrenheit = (weatherTemp * 9) / 5 + 32;
+                    
+                    res.render('weatherdashboard.ejs',  {
+                        shopData,
+                        weather: weather,
+                        city: city,
+                        temp: weatherTemp,
+                        pressure: weatherPressure,
+                        timezone: weatherTimezone,
+                        icon: weatherIcon,
+                        description: weatherDescription,
+                        humidity: humidity,
+                        fahrenheit: weatherFahrenheit,
+                        clouds: clouds,
+                        visibility: visibility,
+                        main: main,
+                        error: null,
+                        shopData,
+                    });
+                }
+                else {
+                    res.send ("No data found");
+                }
+                }
+            });                                                                   
+        });
     }
