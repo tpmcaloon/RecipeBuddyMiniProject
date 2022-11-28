@@ -190,12 +190,12 @@ module.exports = function(app, shopData) {
                         else if (result == true) {
                             // Save user session here, when login is successful
                             req.session.userId = req.sanitize(req.body.username);
-                            res.send('Logged In <a href='+'./'+'>Home</a>');
+                            res.send('Logged In.  Go to <a href='+'./'+'>Home</a>');
                             console.log('Logged In');
                         }
                         else {
                             // TODO: Send message
-                            res.send('Wrong Password or Username.  <a href='+'./'+'>Home</a>');
+                            res.send('Wrong Password or Username.  Go to <a href='+'./'+'>Home</a>');
                             console.log('Wrong Password or Username');
                         }
                     });
@@ -203,7 +203,7 @@ module.exports = function(app, shopData) {
             });
         });
 
-        //Logout Page -----------------------------------------------------------------------
+        //Logout Page ---------------------------------------------------------------------------------------------------------------
         app.get('/logout', redirectLogin, (req,res) => {
             req.session.destroy(err => {
             if (err) {
@@ -213,7 +213,7 @@ module.exports = function(app, shopData) {
         })
     });
 
-        //Delete Users Page -----------------------------------------------------------------------
+        //Delete Users Page ----------------------------------------------------------------------------------------------------------
         app.get('/deleteuser', redirectLogin, function (req,res) {
             res.render('deleteuser.ejs', shopData);                                                                     
         });
@@ -233,11 +233,11 @@ module.exports = function(app, shopData) {
             });
         });
 
-        //Weather Page -----------------------------------------------------------------------
+        //Weather Page --------------------------------------------------------------------------------------------------------------
         app.get('/weather', redirectLogin, function (req,res) {
             res.render('weather.ejs', shopData);                                                                     
         });
-        //Weather Dashboard Page -----------------------------------------------------------------------
+        //Weather Dashboard Page ----------------------------------------------------------------------------------------------------
         app.post('/weather-search', function (req,res) {
             const request = require('request');
             let apiKey = 'd63a0764afba7442fce4d347e40f6084';
@@ -249,6 +249,7 @@ module.exports = function(app, shopData) {
                 } else {
                     
                     var weather = JSON.parse(body)
+                    console.log(weather)
                     if (weather!==undefined && weather.main!==undefined) {
                     let weatherTemp = `${weather.main.temp}`,
                     weatherPressure = `${weather.main.pressure}`,
@@ -277,7 +278,6 @@ module.exports = function(app, shopData) {
                         visibility: visibility,
                         main: main,
                         error: null,
-                        shopData,
                     });
                 }
                 else {
@@ -290,64 +290,81 @@ module.exports = function(app, shopData) {
         //Get API Page -----------------------------------------------------------------------
         app.get('/api', function (req,res) {
             // Query database to get all the books
-            let sqlquery = "SELECT * FROM books";
-            // Execute the sql query
-            db.query(sqlquery, (err, result) => {
-                if (err) {
-                    res.redirect('./');
-                }
-                // Return results as a JSON object
-                res.json(result);
-            });
+            let keyword = req.query.keyword
+            let sqlquery = "SELECT * FROM books"; // query database to get all the books
+            let sqlquerykeyword = "SELECT * FROM books WHERE name LIKE '%" + keyword + "%'"; // query database to get all the books
+            
+            if (keyword == null){
+                // Execute the sql query
+                db.query(sqlquery, (err, result) => {
+                    if (err) {
+                        res.redirect('./');
+                    }
+                    // Return results as a JSON object
+                    res.json(result);
+                });
+            } else{
+                // Execute the sql query
+                db.query(sqlquerykeyword, (err, result) => {
+                    if (err) {
+                        res.redirect('./');
+                    }
+                    // Return results as a JSON object
+                    res.json(result);
+                });
+            }
         });
 
+
         //TV Shows Page -----------------------------------------------------------------------
+
+        //Weather Page --------------------------------------------------------------------------------------------------------------
         app.get('/tvshows', redirectLogin, function (req,res) {
+            res.render('tvshows.ejs', shopData);                                                                     
+        });
+        
+        //TV Results Page ----------------------------------------------------------------------------------------------------
+        app.post('/tvshow-results', function (req,res) {
             const request = require('request');
-            let apiKey = 'd63a0764afba7442fce4d347e40f6084';
-            let city = req.body.city;
-            let url =`http://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`
+            let TVShowName = req.body.tvshow;
+            let url = `https://api.tvmaze.com/singlesearch/shows?q=${TVShowName}`;
             request(url, function (err, response, body) {
                 if(err){
                     console.log('error:', error);
                 } else {
-                    
-                    var weather = JSON.parse(body)
-                    if (weather!==undefined && weather.main!==undefined) {
-                    let weatherTemp = `${weather.main.temp}`,
-                    weatherPressure = `${weather.main.pressure}`,
-                    /* you will fetch the weather icon and its size using the icon data*/
-                    weatherTimezone = `${new Date(weather.dt * 1000 - weather.timezone * 1000)}`;
-                    weatherIcon = `http://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`,
-                    weatherDescription = `${weather.weather[0].description}`,
-                    humidity = `${weather.main.humidity}`,
-                    clouds = `${weather.clouds.all}`,
-                    visibility = `${weather.visibility}`,
-                    main = `${weather.weather[0].main}`,
-                    weatherFahrenheit = (weatherTemp * 9) / 5 + 32;
-                    
-                    res.render('weatherdashboard.ejs',  {
-                        shopData,
-                        weather: weather,
-                        city: city,
-                        temp: weatherTemp,
-                        pressure: weatherPressure,
-                        timezone: weatherTimezone,
-                        icon: weatherIcon,
-                        description: weatherDescription,
-                        humidity: humidity,
-                        fahrenheit: weatherFahrenheit,
-                        clouds: clouds,
-                        visibility: visibility,
-                        main: main,
-                        error: null,
-                        shopData,
-                    });
-                }
-                else {
-                    res.send ("No data found");
-                }
-                }
-            });                                                                   
-        });
-    }
+                    var TVShowData = JSON.parse(body);
+                        console.log(TVShowData);
+                        if (TVShowData !== undefined) {
+                            let name = `${TVShowData.name}`,
+                            type = `${TVShowData.type}`,
+                            language = `${TVShowData.language}`,
+                            status = `${TVShowData.status}`,
+                            runtime = `${TVShowData.runtime}`,
+                            averageruntime = `${TVShowData.averageruntime}`,
+                            premiered = `${TVShowData.premiered}`,
+                            ended = `${TVShowData.ended}`,
+                            rating = `${TVShowData.rating}`,
+                            image = `${TVShowData.image}`,
+                            summary = `${TVShowData.summary}`;
+
+                            res.render('tvshow-results.ejs',  {
+                                shopData,
+                                name: name,
+                                type: type,
+                                language: language,
+                                status: status,
+                                runtime: runtime,
+                                averageruntime: averageruntime,
+                                premiered: premiered,
+                                ended: ended,
+                                rating: rating,
+                                image: image,
+                                summary: summary,
+                            })
+                        } else {
+                            res.send ("No data found");
+                        }
+                    }
+                });
+            });
+        }

@@ -6,6 +6,7 @@ const mysql = require('mysql');
 var session = require ('express-session');
 var validator = require ('express-validator');
 const expressSanitizer = require('express-sanitizer');
+var tvmaze = require("tvmaze-api");
 
 // Create the express application object
 const app = express()
