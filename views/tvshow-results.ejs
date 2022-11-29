@@ -12,6 +12,7 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"/>
     </head>
     <body>
+
         <!-- Horizontal Navbar -->
         <ul style="margin: 10px;">
             <li><a href="./">Home</a></li>
@@ -24,18 +25,20 @@
             <li><a href="./deleteuser">Delete Users</a></li>
             <li><a href="./login">Login</a></li>
             <li><a href="./weather">Weather</a></li>
-            <li><a href="./tvshows.ejs">TV Shows</a></li>
+            <li><a href="./tvshows">TV Shows</a></li>
         </ul>
         <!-- Horizontal Navbar -->
 
         <div class="container" style="margin-left: 15px;">
             <h1 style="margin-bottom: -25px;">TV Dashboard</h1>
             <fieldset>
+
                 <!-- Form to fetch tvshow name -->
                 <form method="POST" action="/tvshow-search">
                     <input name="tvshow" type="text" class="ghost-input" placeholder="Enter a TV Show" required>
                     <input type="submit" class="ghost-button" value="Get TV Show">
                 </form>
+                <!-- Form to fetch tvshow name -->
                 
                 <!-- Returning the fetched Data -->
                 <%if( TVShowData !== null){ %>
@@ -77,6 +80,7 @@
                             </div>
                         </div>
                     <% } %>
+                <!-- Returning the fetched Data -->
                     
                     <!-- Display error Message -->
                     <% if(error !== null){ %>
@@ -84,6 +88,7 @@
                         <% } %>
                     </fieldset>
                 </div>
+                <!-- Display error Message -->
                 
             </body>
-            </html>
+        </html>
