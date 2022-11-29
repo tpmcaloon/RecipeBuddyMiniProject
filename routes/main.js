@@ -278,7 +278,7 @@ module.exports = function(app, shopData) {
                         });
                     }
                     else {
-                        res.send ("No data found");
+                        res.send ("No data found. <br> Return to <a href='./'>Home</a> <br> Return to <a href='./weather'>Weather</a>");
                     }
                 }
             });                                                                   
