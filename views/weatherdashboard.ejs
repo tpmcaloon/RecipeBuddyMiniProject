@@ -2,17 +2,21 @@
 <html lang="en">
   <head>
     <title>Weather</title>
+
     <!-- Required meta tags -->
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <!-- Required meta tags -->
 
     <!-- Bootstrap + Google CSS -->
     <link rel="stylesheet"  type="text/css" href="main.css" />
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"/>
   </head>
+      <!-- Bootstrap + Google CSS -->
   
   <body>
+
     <!-- Horizontal Navbar -->
     <ul style="margin: 10px;">
       <li><a href="./">Home</a></li>
@@ -25,7 +29,7 @@
       <li><a href="./deleteuser">Delete Users</a></li>
       <li><a href="./login">Login</a></li>
       <li><a href="./weather">Weather</a></li>
-      <li><a href="./tvshows.ejs">TV Shows</a></li>
+      <li><a href="./tvshows">TV Shows</a></li>
     </ul>
     <!-- Horizontal Navbar -->
 
@@ -37,6 +41,7 @@
         <input name="city" type="text" class="ghost-input" placeholder="Enter a City" required>
         <input type="submit" class="ghost-button" value="Get Weather">
       </form>
+      <!-- Form to fetch city name -->
       
       <!-- Returning the fetched Data -->
       <%if( weather !== null){ %>
@@ -46,7 +51,7 @@
         </div>
         
         <div class="card-deck">
-          <div class="card card-accent-dark mb-3" style="max-width: 18rem;">
+          <div class="card card-accent-dark mb-3" style="max-width: 15rem;">
             <div class="card-header">Summary</div>
             <div class="card-body text-dark"><%= description %>
               <img src="<%= icon %>" alt="Weather-Icon">
@@ -56,8 +61,9 @@
               <p class="card-text"><%= main %></p>
             </div>
           </div>
+
           <div class="card-deck">
-            <div class="card card-acTomorrowcent-dark mb-3" style="max-width: 18rem;">
+            <div class="card card-acTomorrowcent-dark mb-3" style="max-width: 15rem;">
               <div class="card-header">Description</div>
               <div class="card-body text-dark">
                 <h5 class="card-title">Overall Description: </h5>
@@ -68,8 +74,9 @@
                 <p class="card-text"><%= visibility %> Meters</p>
               </div>
             </div>
+
             <div class="card-deck">
-              <div class="card card-accent-dark mb-3" style="max-width: 18rem;">
+              <div class="card card-accent-dark mb-3" style="max-width: 15rem;">
                 <div class="card-header">Other info</div>
                 <div class="card-body text-dark">
                   <h5 class="card-title">Humidity: </h5>
@@ -82,13 +89,14 @@
               </div>
             </div>
             <% } %>
-            
-            <!-- Display error Message -->
-            <% if(error !== null){ %>
-              <p><%= error %></p>
-              <% } %>
-            </fieldset>
-          </div>
-        
+      <!-- Returning the fetched Data -->
+      
+      <!-- Display error Message -->
+      <% if(error !== null){ %>
+        <p><%= error %></p>
+        <% } %>
+      </fieldset>
+    </div>
+  
   </body>
 </html>
