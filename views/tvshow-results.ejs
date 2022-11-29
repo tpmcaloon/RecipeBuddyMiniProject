@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>TV Shows</title>
+        <!-- Required meta tags -->
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+        
+        <!-- Bootstrap + Google CSS -->
+        <link rel="stylesheet"  type="text/css" href="main.css" />
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"/>
+    </head>
+    <body>
+        <!-- Horizontal Navbar -->
+        <ul style="margin: 10px;">
+            <li><a href="./">Home</a></li>
+            <li><a href="./search">Search</a></li>
+            <li><a href="./addbook">Add Book</a></li>
+            <li><a href="./list">List Books</a></li>
+            <li><a href="./bargainbooks">Bargains</a></li>
+            <li><a href="./register">Register</a></li>
+            <li><a href="./listusers">List Users</a></li>
+            <li><a href="./deleteuser">Delete Users</a></li>
+            <li><a href="./login">Login</a></li>
+            <li><a href="./weather">Weather</a></li>
+            <li><a href="./tvshows.ejs">TV Shows</a></li>
+        </ul>
+        <!-- Horizontal Navbar -->
+
+        <div class="container" style="margin-left: 15px;">
+            <h1 style="margin-bottom: -25px;">TV Dashboard</h1>
+            <fieldset>
+                <!-- Form to fetch tvshow name -->
+                <form method="POST" action="/tvshow-search">
+                    <input name="tvshow" type="text" class="ghost-input" placeholder="Enter a TV Show" required>
+                    <input type="submit" class="ghost-button" value="Get TV Show">
+                </form>
+                
+                <!-- Returning the fetched Data -->
+                <%if( TVShowData !== null){ %>
+                    <div class="grid">
+                        <h1><%= name %></h1>
+                        <p class="text-muted small"><%= type %></p>
+                        <%= name %>
+                        <%= type %>
+                        <%= language %>
+                        <%= status %>
+                        <%= runtime %>
+                        <%= averageruntime %>
+                        <%= premiered %>
+                        <%= ended %>
+                        <%= rating %>
+                        <%= image %>
+                        <%= image %>
+                    </div>
+                </div>
+            </div>
+            <% } %>
+            
+            <!-- Display error Message -->
+            <% if(error !== null){ %>
+                <p><%= error %></p>
+                <% } %>
+            </fieldset>
+        </div>
+    
+    </body>
+</html>

@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <title>Search <%=shopName%></title>
+        <link rel="stylesheet"  type="text/css" href="main.css" />
+    </head>
+    <body>
+        <!-- Horizontal Navbar -->
+        <ul style="margin: 10px;">
+            <li><a href="./">Home</a></li>
+            <li><a href="./search">Search</a></li>
+            <li><a href="./addbook">Add Book</a></li>
+            <li><a href="./list">List Books</a></li>
+            <li><a href="./bargainbooks">Bargains</a></li>
+            <li><a href="./register">Register</a></li>
+            <li><a href="./listusers">List Users</a></li>
+            <li><a href="./deleteuser">Delete Users</a></li>
+            <li><a href="./login">Login</a></li>
+            <li><a href="./weather">Weather</a></li>
+            <li><a href="./tvshows.ejs">TV Shows</a></li>
+        </ul>
+        <!-- Horizontal Navbar -->
+        
+        <h1>Search <%=shopName%></h1>
+        
+        <!-- Search Form/Input -->
+        <form method="POST" action="/tvshow-results">
+            <p>What TV Show do you want?</p>
+            <input id="search-box" type="text" name="tvshow" placeholder="Search ...">
+            <input type="submit" value="Search" >
+        </form>
+        <!-- Search Form/Input -->
+        
+    
+    </body>
+</html>
