@@ -6,7 +6,7 @@
     </head>
     <body>
         <!-- Horizontal Navbar -->
-        <ul style="margin: 10px;">
+        <ul>
             <li><a href="./">Home</a></li>
             <li><a href="./search">Search</a></li>
             <li><a href="./addbook">Add Book</a></li>
@@ -24,7 +24,7 @@
         <h1>Search <%=shopName%></h1>
         
         <!-- Search Form/Input -->
-        <form method="POST" action="/tvshow-results">
+        <form method="POST" action="/tvshow-search">
             <p>What TV Show do you want?</p>
             <input id="search-box" type="text" name="tvshow" placeholder="Search ...">
             <input type="submit" value="Search" >
