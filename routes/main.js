@@ -246,43 +246,41 @@ module.exports = function(app, shopData) {
             request(url, function (err, response, body) {
                 if(err){
                     console.log('error:', error);
-                } else {
-                    
-                    var weather = JSON.parse(body)
-                    console.log(weather)
-                    if (weather!==undefined && weather.main!==undefined) {
-                    let weatherTemp = `${weather.main.temp}`,
-                    weatherPressure = `${weather.main.pressure}`,
-                    /* you will fetch the weather icon and its size using the icon data*/
-                    weatherTimezone = `${new Date(weather.dt * 1000 - weather.timezone * 1000)}`;
-                    weatherIcon = `http://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`,
-                    weatherDescription = `${weather.weather[0].description}`,
-                    humidity = `${weather.main.humidity}`,
-                    clouds = `${weather.clouds.all}`,
-                    visibility = `${weather.visibility}`,
-                    main = `${weather.weather[0].main}`,
-                    weatherFahrenheit = (weatherTemp * 9) / 5 + 32;
-                    
-                    res.render('weatherdashboard.ejs',  {
-                        shopData,
-                        weather: weather,
-                        city: city,
-                        temp: weatherTemp,
-                        pressure: weatherPressure,
-                        timezone: weatherTimezone,
-                        icon: weatherIcon,
-                        description: weatherDescription,
-                        humidity: humidity,
-                        fahrenheit: weatherFahrenheit,
-                        clouds: clouds,
-                        visibility: visibility,
-                        main: main,
-                        error: null,
-                    });
-                }
+                } 
                 else {
-                    res.send ("No data found");
-                }
+                    var weather = JSON.parse(body)
+                    if (weather!==undefined && weather.main!==undefined) {
+                        let weatherTemp = `${weather.main.temp}`,
+                        weatherPressure = `${weather.main.pressure}`,
+                        weatherTimezone = `${new Date(weather.dt * 1000 - weather.timezone * 1000)}`;
+                        weatherIcon = `http://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`,
+                        weatherDescription = `${weather.weather[0].description}`,
+                        humidity = `${weather.main.humidity}`,
+                        clouds = `${weather.clouds.all}`,
+                        visibility = `${weather.visibility}`,
+                        main = `${weather.weather[0].main}`,
+                        weatherFahrenheit = (weatherTemp * 9) / 5 + 32;
+                        
+                        res.render('weatherdashboard.ejs',  {
+                            shopData,
+                            weather: weather,
+                            city: city,
+                            temp: weatherTemp,
+                            pressure: weatherPressure,
+                            timezone: weatherTimezone,
+                            icon: weatherIcon,
+                            description: weatherDescription,
+                            humidity: humidity,
+                            fahrenheit: weatherFahrenheit,
+                            clouds: clouds,
+                            visibility: visibility,
+                            main: main,
+                            error: null,
+                        });
+                    }
+                    else {
+                        res.send ("No data found");
+                    }
                 }
             });                                                                   
         });
@@ -314,57 +312,64 @@ module.exports = function(app, shopData) {
                 });
             }
         });
-
-
+            
         //TV Shows Page -----------------------------------------------------------------------
-
-        //Weather Page --------------------------------------------------------------------------------------------------------------
         app.get('/tvshows', redirectLogin, function (req,res) {
             res.render('tvshows.ejs', shopData);                                                                     
         });
-        
         //TV Results Page ----------------------------------------------------------------------------------------------------
-        app.post('/tvshow-results', function (req,res) {
+        app.post('/tvshow-search', function (req,res) {
             const request = require('request');
             let TVShowName = req.body.tvshow;
             let url = `https://api.tvmaze.com/singlesearch/shows?q=${TVShowName}`;
             request(url, function (err, response, body) {
                 if(err){
                     console.log('error:', error);
-                } else {
+                } 
+                else {
                     var TVShowData = JSON.parse(body);
-                        console.log(TVShowData);
-                        if (TVShowData !== undefined) {
-                            let name = `${TVShowData.name}`,
-                            type = `${TVShowData.type}`,
-                            language = `${TVShowData.language}`,
-                            status = `${TVShowData.status}`,
-                            runtime = `${TVShowData.runtime}`,
-                            averageruntime = `${TVShowData.averageruntime}`,
-                            premiered = `${TVShowData.premiered}`,
-                            ended = `${TVShowData.ended}`,
-                            rating = `${TVShowData.rating}`,
-                            image = `${TVShowData.image}`,
-                            summary = `${TVShowData.summary}`;
-
-                            res.render('tvshow-results.ejs',  {
-                                shopData,
-                                name: name,
-                                type: type,
-                                language: language,
-                                status: status,
-                                runtime: runtime,
-                                averageruntime: averageruntime,
-                                premiered: premiered,
-                                ended: ended,
-                                rating: rating,
-                                image: image,
-                                summary: summary,
-                            })
-                        } else {
-                            res.send ("No data found");
-                        }
+                    if (TVShowData !== null) {
+                        let name = `${TVShowData.name}`,
+                        type = `${TVShowData.type}`,
+                        language = `${TVShowData.language}`,
+                        genres = `${TVShowData.genres[0]}`,
+                        status = `${TVShowData.status}`,
+                        runtime = `${TVShowData.runtime}`,
+                        averageruntime = `${TVShowData.averageRuntime}`,
+                        premiered = `${TVShowData.premiered}`,
+                        ended = `${TVShowData.ended}`,
+                        rating = `${TVShowData.rating.average}`,
+                        image = `${TVShowData.image.medium}`,
+                        summary = `${TVShowData.summary.replace(/<[^>]*>/g, '')}`,
+                        channel = `${TVShowData.network.name}`,
+                        country = `${TVShowData.network.country.name}`,
+                        officialsite = `${TVShowData.network.officialSite}`;
+                        
+                        res.render('tvshow-results.ejs',  {
+                            shopData,
+                            TVShowData: TVShowData,
+                            name: name,
+                            type: type,
+                            language: language,
+                            genres: genres,
+                            status: status,
+                            runtime: runtime,
+                            averageruntime: averageruntime,
+                            premiered: premiered,
+                            ended: ended,
+                            rating: rating,
+                            image: image,
+                            summary: summary,
+                            channel: channel,
+                            country: country,
+                            officialsite: officialsite,
+                            error: null,
+                        });
                     }
-                });
+                    else{
+                        res.send ("No data found. <br> Return to <a href='./'>Home</a> <br> Return to <a href='./tvshows'>TV Shows</a>");
+                    }
+                }
             });
-        }
+        });
+    }

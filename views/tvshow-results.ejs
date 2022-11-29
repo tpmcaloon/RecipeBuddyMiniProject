@@ -41,29 +41,49 @@
                 <%if( TVShowData !== null){ %>
                     <div class="grid">
                         <h1><%= name %></h1>
-                        <p class="text-muted small"><%= type %></p>
-                        <%= name %>
-                        <%= type %>
-                        <%= language %>
-                        <%= status %>
-                        <%= runtime %>
-                        <%= averageruntime %>
-                        <%= premiered %>
-                        <%= ended %>
-                        <%= rating %>
-                        <%= image %>
-                        <%= image %>
-                    </div>
+                        <p class="text-muted small"><%= genres %></p>
+                        <div style="width: fit-content; max-width: 950px" class="card-deck">
+                        <img style="height: 280px; margin-left: 15px;" src="<%= image %>" alt="tvshow-Icon" >
+                        
+                            <div style="width: fit-content;" class="card card-accent-dark mb-3">
+                                <div class="card-header">Summary</div>
+                                <div class="card-body text-dark"><%= summary %></div>
+                            </div>
+                        </div>
+
+                        <div class="card-deck">
+                            <div class="card card-accent-dark mb-3" style="max-width: 18rem;">
+                                <div class="card-header">TV Show Details</div>
+                                <div class="card-body text-dark">Genre: <%= genres %></div>
+                                <div class="card-body text-dark">Rating: <%= rating %></div>
+                                <div class="card-body text-dark">Language: <%= language %></div>
+                                <div class="card-body text-dark">TV Show Status: <%= status %></div>
+                            </div>
+                            
+                                <div class="card card-accent-dark mb-3" style="max-width: 18rem;">
+                                    <div class="card-header">Facts</div>
+                                    <div class="card-body text-dark">Premiered: <%= premiered %></div>
+                                    <div class="card-body text-dark">Ended: <%= ended %></div>
+                                    <div class="card-body text-dark">Runtime: <%= runtime %> Minutes</div>
+                                    <div class="card-body text-dark">Average Runtime: <%= averageruntime %> Minutes</div>
+                                </div>
+
+                                <div class="card card-accent-dark mb-3" style="max-width: 18rem;">
+                                    <div class="card-header">Network</div>
+                                    <div class="card-body text-dark">Channel: <%= channel %></div>
+                                    <div class="card-body text-dark">Country: <%= country %></div>
+                                    <div class="card-body text-dark">Official Site: <a href="<%= officialsite %>"><%= channel %></a></div>
+                                </div>
+                            </div>
+                        </div>
+                    <% } %>
+                    
+                    <!-- Display error Message -->
+                    <% if(error !== null){ %>
+                        <p><%= error %></p>
+                        <% } %>
+                    </fieldset>
                 </div>
-            </div>
-            <% } %>
-            
-            <!-- Display error Message -->
-            <% if(error !== null){ %>
-                <p><%= error %></p>
-                <% } %>
-            </fieldset>
-        </div>
-    
-    </body>
-</html>
+                
+            </body>
+            </html>
