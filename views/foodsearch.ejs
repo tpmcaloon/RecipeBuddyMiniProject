@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Search <%=shopName%></title>
+    <link rel="stylesheet"  type="text/css" href="main.css" />
+  </head>
+  <body>
+
+    <!-- Horizontal Navbar -->
+    <ul>
+      <li><a href="./">Home</a></li>
+      <li><a href="about">About <%=shopName%></a></li>
+      <li></li>
+      <li class="dropdown">
+          <a class="active" href="javascript:void(0)" class="dropbtn">Food</a>
+          <div class="dropdown-content">
+          <a href="foodsearch">Search for Foods</a>
+          <a href="foodadd">Add Food</a>
+          <a href="foodlist">List Foods</a>
+          <a href="foodupdate">Update Foods</a>
+          <a href="foodhighprotein">High Protein Foods</a>
+      <li class="dropdown">
+          <a href="javascript:void(0)" class="dropbtn">Users</a>
+          <div class="dropdown-content">
+          <a href="userlist">List Users</a>
+          <a href="userdelete">Delete Users</a>
+      <li class="dropdown">
+      <a href="javascript:void(0)" class="dropbtn">Account</a>
+          <div class="dropdown-content">
+          <a href="login">Login</a>
+          <a href="logout">Logout</a>
+      <li><a href="register">Register with us</a></li>
+      </ul>
+      <!-- Horizontal Navbar -->
+    
+    <h1>Search <%=shopName%></h1>
+
+    <!-- Search Form/Input -->
+    <form action="/search-result" method="GET">
+      <p>What Food Do You Want To Find ?</p>
+      <input id="search-box" type="text" name="keyword" placeholder="Search ...">
+      <input type="submit" value="Search" >
+    </form>
+    <!-- Search Form/Input -->
+    
+  </body>
+</html>

@@ -23,27 +23,62 @@ module.exports = function(app, shopData) {
     });
 
     //Search + Search Results Page -----------------------------------------------------------------------
-    app.get('/search', redirectLogin,function(req,res){
-        res.render("search.ejs", shopData);
+    app.get('/foodsearch', redirectLogin,function(req,res){
+        res.render("foodsearch.ejs", shopData);
     });
     app.get('/search-result', function (req, res) {
         //searching in the database
-        let sqlquery = "SELECT * FROM books WHERE name LIKE '%" + req.query.keyword + "%'"; // query database to get all the books
+        let sqlquery = "SELECT * FROM foods WHERE FoodName LIKE '%" + req.query.keyword + "%'"; // query database to get all the foods
+        // execute sql query
+        db.query(sqlquery, (err, result) => {
+            if (err) {
+                res.redirect('./')
+            }
+            let newData = Object.assign({}, shopData, {availableFoods:result});
+            res.render("foodlist.ejs", newData)
+        });        
+    });
+
+    //Search + Update Foods Page -----------------------------------------------------------------------
+    app.get('/foodupdate', redirectLogin, function(req, res) {
+        let sqlquery = "SELECT * FROM foods"; // query database to get all the books
         // execute sql query
         db.query(sqlquery, (err, result) => {
             if (err) {
                 res.redirect('./'); 
             }
-            let newData = Object.assign({}, shopData, {availableBooks:result});
+            let newData = Object.assign({}, shopData, {availableFoods:result});
             console.log(newData)
-            res.render("list.ejs", newData)
-        });        
+            res.render("foodupdate.ejs", newData)
+        });
+    });
+    app.post('/foodupdated', function (req, res) {
+        //searching in the database
+        let updatedrecord = [req.sanitize(req.body.name), req.sanitize(req.body.typicalvaluesper), req.sanitize(req.body.unitofthetypicalvalue), req.sanitize(req.body.carbs), req.sanitize(req.body.fat), req.sanitize(req.body.protein), req.sanitize(req.body.salt), req.sanitize(req.body.sugar)];
+        let sqlquery = "UPDATE foods SET TypicalValuesPer = '%" + req.body.typicalvaluesper + "%', UnitOfTheTypicalValue = '%" + req.body.unitofthetypicalvalue + "%', Carbs = '%" + req.body.carbs + "%', Fat = '%" + req.body.fat + "%', Protein = '%" + req.body.protein + "%', Salt = '%" + req.body.salt + "%', Sugar = '%" + req.body.sugar + "%' WHERE FoodName = '%" + req.body.name + "%';"
+        // execute sql query
+        db.query(sqlquery, updatedrecord, (err, result) => {
+            if (err) {
+                return console.error(err.message);
+            }
+            else
+            res.send(' This food has been added to database -'
+            + '<br>' + ' Name: '+ req.sanitize(req.body.name)
+            + '<br>' + ' Typical Values Per: '+ req.sanitize(req.body.typicalvaluesper)
+            + '<br>' + ' Unit: ' + req.sanitize(req.body.unitofthetypicalvalue)
+            + '<br>' + ' Carbs: '+ req.sanitize(req.body.carbs)
+            + '<br>' + ' Fat: '+ req.sanitize(req.body.fat)
+            + '<br>' + ' Protein: '+ req.sanitize(req.body.protein)
+            + '<br>' + ' Salt: '+ req.sanitize(req.body.salt)
+            + '<br>' + ' Sugar: '+ req.sanitize(req.body.sugar)
+            + '<br>' + ' Return to <a href='+'./'+'>Home</a>');
+        });
     });
     
     //Register + Registered Page -----------------------------------------------------------------------
-    app.get('/register', function (req,res) {
-        res.render('register.ejs', shopData);                                                                     
-    });                                                                                                 
+    app.get('/register',function(req, res) {
+        res.render('register.ejs', shopData)
+    });
     app.post('/registered', 
     [check('email', 'Your email is not valid').not().isEmpty()], 
     [check('password', 'The password must be 8+ chars long and contain a number')
@@ -79,22 +114,22 @@ module.exports = function(app, shopData) {
             }
         });
         
-    //List Books Page -----------------------------------------------------------------------
-    app.get('/list', redirectLogin, function(req, res) {
-        let sqlquery = "SELECT * FROM books"; // query database to get all the books
+    //List Foods Page -----------------------------------------------------------------------
+    app.get('/foodlist', function(req, res) {
+        let sqlquery = "SELECT Foods.FoodName, Foods.TypicalValuesPer, Foods.UnitOfTheTypicalValue, Foods.Carbs, Foods.Fat, Foods.Protein, Foods.Salt, Foods.Sugar, Users.Username FROM Users INNER JOIN Foods ON Users.UserID=Foods.UserID;"; // query database to get all the Foods + User
         // execute sql query
         db.query(sqlquery, (err, result) => {
             if (err) {
                 res.redirect('./'); 
             }
-            let newData = Object.assign({}, shopData, {availableBooks:result});
+            let newData = Object.assign({}, shopData, {availableFoods:result});
             console.log(newData)
-            res.render("list.ejs", newData)
+            res.render("foodlist.ejs", newData)
         });
     });
 
     //List Users Page -----------------------------------------------------------------------
-    app.get('/listusers', redirectLogin, function(req, res) {
+    app.get('/userlist', redirectLogin, function(req, res) {
         let sqlquery = "SELECT * FROM users"; // query database to get all the books
         // execute sql query
         db.query(sqlquery, (err, result) => {
@@ -103,40 +138,55 @@ module.exports = function(app, shopData) {
             }
             let newData = Object.assign({}, shopData, {registeredUsers:result});
             console.log(newData)
-            res.render("listusers.ejs", newData)
+            res.render("userlist.ejs", newData)
         });
     });
 
-    //Add Book + Book Added Page -----------------------------------------------------------------------
-    app.get('/addbook', redirectLogin,
-    [check('price', 'Must be an Integer').isInt()], 
+    //Add Food + Food Added Page -----------------------------------------------------------------------
+    app.get('/foodadd', redirectLogin,
+    [check('carbs', 'Must be an Integer').isInt()], 
     function (req, res) {
-        res.render('addbook.ejs', shopData);
+        res.render('foodadd.ejs',shopData);
     });
-    app.post('/bookadded', function (req,res) {
+    app.post('/foodadded', function (req,res) {
         // saving data in database
-        let sqlquery = "INSERT INTO books (name, price) VALUES (?,?)";
+        let userquery = "Select UserID From Users";
+        db.query(userquery, (err, result) => {
+            let userID = result[0].UserID;
+        
+        let sqlquery = "INSERT INTO foods (FoodName, TypicalValuesPer, UnitOfTheTypicalValue, Carbs, Fat, Protein, Salt, Sugar, UserID) VALUES (?,?,?,?,?,?,?,?,?)";
         // execute sql query
-        let newrecord = [req.sanitize(req.body.name), req.sanitize(req.body.price)];
+        let newrecord = [req.sanitize(req.body.name), req.sanitize(req.body.typicalvaluesper), req.sanitize(req.body.unitofthetypicalvalue), req.sanitize(req.body.carbs), req.sanitize(req.body.fat), req.sanitize(req.body.protein), req.sanitize(req.body.salt), req.sanitize(req.body.sugar), userID];
         db.query(sqlquery, newrecord, (err, result) => {
             if (err) {
                 return console.error(err.message);
             }
             else
-            res.send(' This book is added to database, name: '+ req.sanitize(req.body.name) + ' price '+ req.sanitize(req.body.price) + '. <a href='+'./'+'>Home</a>');
+            res.send(' This food has been added to database -'
+            + '<br>' + ' Name: '+ req.sanitize(req.body.name)
+            + '<br>' + ' Typical Values Per: '+ req.sanitize(req.body.typicalvaluesper) + req.sanitize(req.body.unitofthetypicalvalue)
+            + '<br>' + ' Unit: ' + req.sanitize(req.body.unitofthetypicalvalue)
+            + '<br>' + ' Carbs: '+ req.sanitize(req.body.carbs) + req.sanitize(req.body.unitofthetypicalvalue)
+            + '<br>' + ' Fat: '+ req.sanitize(req.body.fat) + req.sanitize(req.body.unitofthetypicalvalue)
+            + '<br>' + ' Protein: '+ req.sanitize(req.body.protein) + req.sanitize(req.body.unitofthetypicalvalue)
+            + '<br>' + ' Salt: '+ req.sanitize(req.body.salt) + req.sanitize(req.body.unitofthetypicalvalue)
+            + '<br>' + ' Sugar: '+ req.sanitize(req.body.sugar) + req.sanitize(req.body.unitofthetypicalvalue)
+            + '<br>' + 'Return to <a href='+'./'+'>Home</a>');
         });
     });
+})
 
-    //Bargain Books Page -----------------------------------------------------------------------
-    app.get('/bargainbooks', redirectLogin, function(req, res) {
-        let sqlquery = "SELECT * FROM books WHERE price < 20";
+
+    //High Protein Foods Page -----------------------------------------------------------------------
+    app.get('/foodhighprotein', redirectLogin, function(req, res) {
+        let sqlquery = "SELECT * FROM foods WHERE protein > 10";
         db.query(sqlquery, (err, result) => {
             if (err) {
                 res.redirect('./');
             }
-            let newData = Object.assign({}, shopData, {availableBooks:result});
+            let newData = Object.assign({}, shopData, {availableFoods:result});
             console.log(newData)
-            res.render("bargains.ejs", newData)
+            res.render("foodhighprotein.ejs", newData)
         });
     }); 
 
@@ -189,7 +239,7 @@ module.exports = function(app, shopData) {
                         else if (result == true) {
                             // Save user session here, when login is successful
                             req.session.userId = req.sanitize(req.body.username);
-                            res.send('Logged In.  Go to <a href='+'./'+'>Home</a>');
+                            res.send('You are now Logged In.  Go to <a href='+'./'+'>Home</a>');
                             console.log('Logged In');
                         }
                         else {
@@ -208,13 +258,13 @@ module.exports = function(app, shopData) {
             if (err) {
             return res.redirect('./')
             }
-            res.send('you are now logged out. <a href='+'./'+'>Home</a>');
+            res.send('You are now Logged Out. Return to <a href='+'./'+'>Home</a>');
         })
     });
 
         //Delete Users Page ----------------------------------------------------------------------------------------------------------
-        app.get('/deleteuser', redirectLogin, function (req,res) {
-            res.render('deleteuser.ejs', shopData);                                                                     
+        app.get('/userdelete', redirectLogin, function (req,res) {
+            res.render('userdelete.ejs', shopData);                                                                     
         });
         app.post('/deleteduser', function (req,res) {
             //SQL to delete a User based on what the User typed
@@ -231,65 +281,13 @@ module.exports = function(app, shopData) {
                         console.log('User Delete Successful');
             });
         });
-
-        //Weather Page --------------------------------------------------------------------------------------------------------------
-        app.get('/weather', redirectLogin, function (req,res) {
-            res.render('weather.ejs', shopData);                                                                     
-        });
-        //Weather Dashboard Page ----------------------------------------------------------------------------------------------------
-        app.post('/weather-search', function (req,res) {
-            const request = require('request');
-            let apiKey = 'd63a0764afba7442fce4d347e40f6084';
-            let city = req.body.city;
-            let url =`http://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`
-            request(url, function (err, response, body) {
-                if(err){
-                    console.log('error:', error);
-                } 
-                else {
-                    var weather = JSON.parse(body)
-                    if (weather!==undefined && weather.main!==undefined) {
-                        let weatherTemp = `${weather.main.temp}`,
-                        weatherPressure = `${weather.main.pressure}`,
-                        weatherTimezone = `${new Date(weather.dt * 1000 - weather.timezone * 1000)}`;
-                        weatherIcon = `http://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`,
-                        weatherDescription = `${weather.weather[0].description}`,
-                        humidity = `${weather.main.humidity}`,
-                        clouds = `${weather.clouds.all}`,
-                        visibility = `${weather.visibility}`,
-                        main = `${weather.weather[0].main}`,
-                        weatherFahrenheit = (weatherTemp * 9) / 5 + 32;
-                        
-                        res.render('weatherdashboard.ejs',  {
-                            shopData,
-                            weather: weather,
-                            city: city,
-                            temp: weatherTemp,
-                            pressure: weatherPressure,
-                            timezone: weatherTimezone,
-                            icon: weatherIcon,
-                            description: weatherDescription,
-                            humidity: humidity,
-                            fahrenheit: weatherFahrenheit,
-                            clouds: clouds,
-                            visibility: visibility,
-                            main: main,
-                            error: null,
-                        });
-                    }
-                    else {
-                        res.send ("No data found. <br> Return to <a href='./'>Home</a> <br> Return to <a href='./weather'>Weather</a>");
-                    }
-                }
-            });                                                                   
-        });
         
         //Get API Page -----------------------------------------------------------------------
         app.get('/api', function (req,res) {
             // Query database to get all the books
             let keyword = req.query.keyword
-            let sqlquery = "SELECT * FROM books"; // query database to get all the books
-            let sqlquerykeyword = "SELECT * FROM books WHERE name LIKE '%" + keyword + "%'"; // query database to get all the books
+            let sqlquery = "SELECT * FROM foods"; // query database to get all the books
+            let sqlquerykeyword = "SELECT * FROM foods WHERE FoodName LIKE '%" + keyword + "%'"; // query database to get all the books
             
             if (keyword == null){
                 // Execute the sql query
@@ -312,63 +310,4 @@ module.exports = function(app, shopData) {
             }
         });
             
-        //TV Shows Page -----------------------------------------------------------------------
-        app.get('/tvshows', redirectLogin, function (req,res) {
-            res.render('tvshows.ejs', shopData);                                                                     
-        });
-        //TV Results Page ----------------------------------------------------------------------------------------------------
-        app.post('/tvshow-search', function (req,res) {
-            const request = require('request');
-            let TVShowName = req.body.tvshow;
-            let url = `https://api.tvmaze.com/singlesearch/shows?q=${TVShowName}`;
-            request(url, function (err, response, body) {
-                if(err){
-                    console.log('error:', error);
-                } 
-                else {
-                    var TVShowData = JSON.parse(body);
-                    if (TVShowData !== null) {
-                        let name = `${TVShowData.name}`,
-                        type = `${TVShowData.type}`,
-                        language = `${TVShowData.language}`,
-                        genres = `${TVShowData.genres[0]}`,
-                        status = `${TVShowData.status}`,
-                        runtime = `${TVShowData.runtime}`,
-                        averageruntime = `${TVShowData.averageRuntime}`,
-                        premiered = `${TVShowData.premiered}`,
-                        ended = `${TVShowData.ended}`,
-                        rating = `${TVShowData.rating.average}`,
-                        image = `${TVShowData.image.medium}`,
-                        summary = `${TVShowData.summary.replace(/<[^>]*>/g, '')}`,
-                        channel = `${TVShowData.network.name}`,
-                        country = `${TVShowData.network.country.name}`,
-                        officialsite = `${TVShowData.network.officialSite}`;
-                        
-                        res.render('tvshow-results.ejs',  {
-                            shopData,
-                            TVShowData: TVShowData,
-                            name: name,
-                            type: type,
-                            language: language,
-                            genres: genres,
-                            status: status,
-                            runtime: runtime,
-                            averageruntime: averageruntime,
-                            premiered: premiered,
-                            ended: ended,
-                            rating: rating,
-                            image: image,
-                            summary: summary,
-                            channel: channel,
-                            country: country,
-                            officialsite: officialsite,
-                            error: null,
-                        });
-                    }
-                    else{
-                        res.send ("No data found. <br> Return to <a href='./'>Home</a> <br> Return to <a href='./tvshows'>TV Shows</a>");
-                    }
-                }
-            });
-        });
     }

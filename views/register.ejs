@@ -9,28 +9,45 @@
     <!-- Horizontal Navbar -->
     <ul>
       <li><a href="./">Home</a></li>
-      <li><a href="./search">Search</a></li>
-      <li><a href="./addbook">Add Book</a></li>
-      <li><a href="./list">List Books</a></li>
-      <li><a href="./bargainbooks">Bargains</a></li>
-      <li><a href="./register">Register</a></li>
-      <li><a href="./listusers">List Users</a></li>
-      <li><a href="./deleteuser">Delete Users</a></li>
-      <li><a href="./login">Login</a></li>
-      <li><a href="./weather">Weather</a></li>
-      <li><a href="./tvshows">TV Shows</a></li>
-    </ul>
-    <!-- Horizontal Navbar -->
+      <li><a href="about">About <%=shopName%></a></li>
+      <li></li>
+      <li class="dropdown">
+          <a href="javascript:void(0)" class="dropbtn">Food</a>
+          <div class="dropdown-content">
+          <a href="foodsearch">Search for Foods</a>
+          <a href="foodadd">Add Food</a>
+          <a href="foodlist">List Foods</a>
+          <a href="foodupdate">Update Foods</a>
+          <a href="foodhighprotein">High Protein Foods</a>
+      <li class="dropdown">
+          <a href="javascript:void(0)" class="dropbtn">Users</a>
+          <div class="dropdown-content">
+          <a href="userlist">List Users</a>
+          <a href="userdelete">Delete Users</a>
+      <li class="dropdown">
+      <a href="javascript:void(0)" class="dropbtn">Account</a>
+          <div class="dropdown-content">
+          <a href="login">Login</a>
+          <a href="logout">Logout</a>
+      <li><a class="active" href="register">Register with us</a></li>
+      </ul>
+      <!-- Horizontal Navbar -->
     
     <h1>Register for <%=shopName%></h1>
 
     <!-- Registration Form -->
     <form method="POST" action="/registered">
-      <p>Username: <input id="username" type="text" name="username" placeholder="Username..." required/></p>
-      <p>First name: <input id="firstname" type="text" name="firstname" placeholder="First Name..." required/></p>
-      <p>Last name: <input id="lastname" type="text" name="lastname" placeholder="Last Name..." required/></p>
-      <p>Email: <input id="email" type="email" name="email" placeholder=" Email..." required/></p>
-      <p>Password: <input id="password" type="password" name="password" placeholder=" Password..." required/></p>
+      <label>Username</label>
+      <input id="username" type="text" name="username" placeholder="Username..." required/>
+      <label>First name</label>
+      <input id="firstname" type="text" name="firstname" placeholder="First Name..." required/>
+      <label>Last name</label>
+      <input id="lastname" type="text" name="lastname" placeholder="Last Name..." required/>
+      <label>Email</label>
+      <input id="email" type="email" name="email" placeholder=" Email..." required/>
+      <label>Password</label>
+      <p style="font-size: small;">Password must not contain '123', 'password', 'god' <br> Must be 8+ chars long and contain a number</p>
+      <input id="password" type="password" name="password" placeholder=" Password..." required/>
       <input type="submit" value="Register" />
     </form>
     <!-- Registration Form -->

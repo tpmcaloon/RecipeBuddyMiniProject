@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Add Food to <%=shopName%></title>
+    <link rel="stylesheet"  type="text/css" href="main.css" />
+  </head>
+  <body>
+
+    <!-- Horizontal Navbar -->
+    <ul>
+      <li><a href="./">Home</a></li>
+      <li><a href="about">About <%=shopName%></a></li>
+      <li></li>
+      <li class="dropdown">
+          <a class="active" href="javascript:void(0)" class="dropbtn">Food</a>
+          <div class="dropdown-content">
+          <a href="foodsearch">Search for Foods</a>
+          <a href="foodadd">Add Food</a>
+          <a href="foodlist">List Foods</a>
+          <a href="foodupdate">Update Foods</a>
+          <a href="foodhighprotein">High Protein Foods</a>
+      <li class="dropdown">
+          <a href="javascript:void(0)" class="dropbtn">Users</a>
+          <div class="dropdown-content">
+          <a href="userlist">List Users</a>
+          <a href="userdelete">Delete Users</a>
+      <li class="dropdown">
+      <a href="javascript:void(0)" class="dropbtn">Account</a>
+          <div class="dropdown-content">
+          <a href="login">Login</a>
+          <a href="logout">Logout</a>
+      <li><a href="register">Register with us</a></li>
+      </ul>
+      <!-- Horizontal Navbar -->
+
+    <!-- Add Book Form -->
+    <h1><%=shopName%>: Add Food</h1>
+    <div>
+    <form method="POST" action="/foodadded">
+        <label>Food name</label>
+        <input id="name" type="text" name="name" value="" required/>
+
+        <label>Typical Values Per</label>
+        <input id="typicalvaluesper" type="text" name="typicalvaluesper" value="" required/>
+
+        <label>Unit</label>
+        <select id="unitofthetypicalvalue" name="unitofthetypicalvalue">
+            <option value="g">g</option>
+            <option value="lb">lb</option>
+            <option value="ml">ml</option>
+            </select>
+
+        <label>Carbs</label>
+          <input id="carbs" type="text" name="carbs" value="" required/>
+
+        <label>Fat</label>
+        <input id="fat" type="text" name="fat" value="" required/>
+
+        <label>Protein</label>
+        <input id="protein" type="text" name="protein" value="" required/>
+
+        <label>Salt</label>
+        <input id="salt" type="text" name="salt" value="" required/>
+
+        <label>Sugar</label>
+        <input id="sugar" type="text" name="sugar" value="" required/>
+
+        <input type="submit" value="Add Food" />
+    </form>
+  </div>
+    <!-- Add Book Form -->
+    
+</body>
+</html>
+

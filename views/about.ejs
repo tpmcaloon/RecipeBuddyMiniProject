@@ -9,20 +9,31 @@
     <!-- Horizontal Navbar -->
     <ul>
       <li><a href="./">Home</a></li>
-      <li><a href="./search">Search</a></li>
-      <li><a href="./addbook">Add Book</a></li>
-      <li><a href="./list">List Books</a></li>
-      <li><a href="./bargainbooks">Bargains</a></li>
-      <li><a href="./register">Register</a></li>
-      <li><a href="./listusers">List Users</a></li>
-      <li><a href="./deleteuser">Delete Users</a></li>
-      <li><a href="./login">Login</a></li>
-      <li><a href="./weather">Weather</a></li>
-      <li><a href="./tvshows">TV Shows</a></li>
-    </ul>
-    <!-- Horizontal Navbar -->
+      <li><a class="active" href="about">About <%=shopName%></a></li>
+      <li></li>
+      <li class="dropdown">
+          <a href="javascript:void(0)" class="dropbtn">Food</a>
+          <div class="dropdown-content">
+          <a href="foodsearch">Search for Foods</a>
+          <a href="foodadd">Add Food</a>
+          <a href="foodlist">List Foods</a>
+          <a href="foodupdate">Update Foods</a>
+          <a href="foodhighprotein">High Protein Foods</a>
+      <li class="dropdown">
+          <a href="javascript:void(0)" class="dropbtn">Users</a>
+          <div class="dropdown-content">
+          <a href="userlist">List Users</a>
+          <a href="userdelete">Delete Users</a>
+      <li class="dropdown">
+      <a href="javascript:void(0)" class="dropbtn">Account</a>
+          <div class="dropdown-content">
+          <a href="login">Login</a>
+          <a href="logout">Logout</a>
+      <li><a href="register">Register with us</a></li>
+      </ul>
+      <!-- Horizontal Navbar -->
     
     <h1>About <%=shopName%></h1>
-    <p>We sell all sorts of books and nothing else!</p>
+    <p style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-weight: bold; color: #fff;">This Mini Project was developed by Tom McAloon! This application functions as a digital nutrient monitor.</p>
   </body>
 </html>

@@ -6,7 +6,7 @@ const mysql = require('mysql');
 var session = require ('express-session');
 var validator = require ('express-validator');
 const expressSanitizer = require('express-sanitizer');
-var tvmaze = require("tvmaze-api");
+var passport = require('passport');
 
 // Create the express application object
 const app = express()
@@ -26,6 +26,15 @@ app.use(session({
     // Create an input sanitizer
 app.use(expressSanitizer());
 
+app.use(passport.initialize());
+app.use(passport.session({
+    secret: 'cookie_secret',
+    name: 'cookie_name',
+    proxy: true,
+    resave: true,
+    saveUninitialized: true
+}));
+
 // Set up css
 app.use(express.static(__dirname + '/public'));
 
@@ -34,7 +43,7 @@ const db = mysql.createConnection ({
     host: 'localhost',
     user: 'appuser',
     password: 'app2027',
-    database: 'myBookshop'
+    database: 'recipebuddy'
 });
 // Connect to the database
 db.connect((err) => {
@@ -58,7 +67,7 @@ app.set('view engine', 'ejs');
 app.engine('html', ejs.renderFile);
 
 // Define our data
-var shopData = {shopName: "Berties's Bookshop"}
+var shopData = {shopName: "Recipe Buddy"}
 
 // Requires the main.js file inside the routes folder passing in the Express app and data as arguments.  All the routes will go in this file
 require("./routes/main")(app, shopData);
