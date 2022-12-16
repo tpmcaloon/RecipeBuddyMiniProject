@@ -62,7 +62,7 @@ module.exports = function(app, shopData) {
                 return console.error(err.message);
             }
             else
-            res.send(' This food has been added to database -'
+            res.send(' This food has been updated in the database -'
             + '<br>' + ' Name: '+ req.sanitize(req.body.name)
             + '<br>' + ' Typical Values Per: '+ req.sanitize(req.body.typicalvaluesper)
             + '<br>' + ' Unit: ' + req.sanitize(req.body.unitofthetypicalvalue)

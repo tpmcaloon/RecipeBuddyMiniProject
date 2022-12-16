@@ -9,7 +9,7 @@
 table#foodlist_table th {color:#fff;} 
 table#foodlist_table tr:nth-child(even) { background-color: #1DB954; color:#fff;} 
 table#foodlist_table tr:nth-child(odd) {color:#fff;} 
-table#foodlist_table {margin-top: 20px; width: 50%; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-weight: 600; background-color: #303030; border-radius: 15px; margin-left: auto; margin-right: auto;}
+table#foodlist_table {margin-top: 20px; width: 70%; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-weight: 600; background-color: #303030; border-radius: 15px; margin-left: auto; margin-right: auto;}
 </style>
 
 <!-- Horizontal Navbar -->
@@ -42,67 +42,39 @@ table#foodlist_table {margin-top: 20px; width: 50%; font-family: 'Segoe UI', Tah
     <h1>Update Food On <%=shopName%></h1>
 
     <!-- Table View of Foods -->
+    <form style="width: fit-content; background-color: transparent;" method="POST" action="/foodupdated">
     <table id="foodlist_table"> 
         <tr>
             <th>Food Name</th>
             <th>Typical Values Per</th>
             <th>Unit</th>
             <th>Carbs</th>
-            <th>Name</th>
+            <th>Fat</th>
             <th>Protein</th>
             <th>Salt</th>
             <th>Sugar</th>
+            <th>Add to Meal</th>
+            <th>Update</th>
+            <th>Delete</th>
         </tr>
         <% availableFoods.forEach(function(food) { %>
-        <tr style="text-align: center;">
-            <td><%= food.FoodName %></td>
-            <td><%= food.TypicalValuesPer %></td>
-            <td><%= food.UnitOfTheTypicalValue %></td>
-            <td><%= food.Carbs %></td>
-            <td><%= food.Fat %></td>
-            <td><%= food.Protein %></td>
-            <td><%= food.Salt %></td>
-            <td><%= food.Sugar %></td>
+            <tr style="text-align: center;">
+            <td><input id="name" type="text" name="name" value="<%= food.FoodName %>" required/></td>
+            <td><input id="typicalvaluesper" type="text" name="typicalvaluesper" value="<%= food.TypicalValuesPer %>" required/></td>
+            <td><input id="unitofthetypicalvalue" type="text" name="unitofthetypicalvalue" value="<%= food.UnitOfTheTypicalValue %>" required/></td>
+            <td><input id="carbs" type="text" name="carbs" value="<%= food.Carbs %>" required/></td>
+            <td><input id="fat" type="text" name="fat" value="<%= food.Fat %>" required/></td>
+            <td><input id="protein" type="text" name="protein" value="<%= food.Protein %>" required/></td>
+            <td><input id="salt" type="text" name="salt" value="<%= food.Salt %>" required/></td>
+            <td><input id="sugar" type="text" name="sugar" value="<%= food.Sugar %>" required/></td>
+            <td><input type="checkbox" id="addToMeal" value="Add"></td>
+            <td><button>Edit</button></td>
+            <td><button>Delete</button></td>
             <% }) %>
         </tr>
     </table>
-    <!-- Table View of Foods -->
-
-    <!-- Add Book Form -->
-    <div style="margin-top: 20px;">
-    <form method="POST" action="/foodupdated">
-        <label>Food name</label>
-        <input id="name" type="text" name="name" value="" required/>
-
-        <label>Typical Values Per</label>
-        <input id="typicalvaluesper" type="text" name="typicalvaluesper" value="" required/>
-
-        <label>Unit</label>
-        <select id="unitofthetypicalvalue" name="unitofthetypicalvalue">
-            <option value="g">g</option>
-            <option value="lb">lb</option>
-            <option value="ml">ml</option>
-            </select>
-
-        <label>Carbs</label>
-        <input id="carbs" type="text" name="carbs" value="" required/>
-
-        <label>Fat</label>
-        <input id="fat" type="text" name="fat" value="" required/>
-
-        <label>Protein</label>
-        <input id="protein" type="text" name="protein" value="" required/>
-
-        <label>Salt</label>
-        <input id="salt" type="text" name="salt" value="" required/>
-
-        <label>Sugar</label>
-        <input id="sugar" type="text" name="sugar" value="" required/>
-
-        <input type="submit" value="Update Food" />
     </form>
-    </div>
-    <!-- Add Book Form -->
+    <!-- Table View of Foods -->
     
 </body>
 </html>
