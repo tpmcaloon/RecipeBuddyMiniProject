@@ -116,7 +116,7 @@ module.exports = function(app, shopData) {
         
     //List Foods Page -----------------------------------------------------------------------
     app.get('/foodlist', function(req, res) {
-        let sqlquery = "SELECT Foods.FoodName, Foods.TypicalValuesPer, Foods.UnitOfTheTypicalValue, Foods.Carbs, Foods.Fat, Foods.Protein, Foods.Salt, Foods.Sugar, Users.Username FROM Users INNER JOIN Foods ON Users.UserID=Foods.UserID;"; // query database to get all the Foods + User
+        let sqlquery = "SELECT Foods.FoodName, Foods.TypicalValuesPer, Foods.UnitOfTheTypicalValue, Foods.Carbs, Foods.Fat, Foods.Protein, Foods.Salt, Foods.Sugar, Users.Username FROM users INNER JOIN foods ON Users.UserID=Foods.FoodID;"; // query database to get all the Foods + User
         // execute sql query
         db.query(sqlquery, (err, result) => {
             if (err) {
