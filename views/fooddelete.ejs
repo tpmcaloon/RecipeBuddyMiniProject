@@ -1,11 +1,18 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <title>Register for <%=shopName%></title>
+    <title><%=shopName%> Books</title>
     <link rel="stylesheet"  type="text/css" href="main.css" />
+
+    <style>
+      table#foodlist_table th {color:#fff;} 
+      table#foodlist_table tr:nth-child(even) { background-color: #1DB954; color:#fff;} 
+      table#foodlist_table tr:nth-child(odd) {color:#fff;} 
+      table#foodlist_table {width: 60%; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-weight: bold; background-color: #303030; border-radius: 15px; margin-left: auto; margin-right: auto;}
+  </style>
   </head>
   <body>
-
+    
     <!-- Horizontal Navbar -->
     <ul>
       <li><a class="active" href="./">Home</a></li>
@@ -35,24 +42,13 @@
       </ul>
       <!-- Horizontal Navbar -->
     
-    <h1>Register for <%=shopName%></h1>
+    <h1><%=shopName%></h1>
 
-    <!-- Registration Form -->
-    <form method="POST" action="/registered">
-      <label>Username</label>
-      <input id="username" type="text" name="username" placeholder="Username..." required/>
-      <label>First name</label>
-      <input id="firstname" type="text" name="firstname" placeholder="First Name..." required/>
-      <label>Last name</label>
-      <input id="lastname" type="text" name="lastname" placeholder="Last Name..." required/>
-      <label>Email</label>
-      <input id="email" type="email" name="email" placeholder=" Email..." required/>
-      <label>Password</label>
-      <p style="font-size: small;">Password must not contain '123', 'password', 'god' <br> Must be 8+ chars long and contain a number</p>
-      <input id="password" type="password" name="password" placeholder=" Password..." required/>
-      <input type="submit" value="Register" />
-    </form>
-    <!-- Registration Form -->
-    
-  </body>
+    <form method="POST" action="/fooddeleted">
+      <label for="foods">Select Food for Deletion:</label>
+      <p>Food Name: <input id="foodname" type="text" name="foodname" placeholder="Enter Food Name..." required/></p>      
+      <input type="submit" value="Submit" />
+  </form>
+
+</body>
 </html>

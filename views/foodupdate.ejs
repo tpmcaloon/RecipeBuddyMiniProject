@@ -14,16 +14,17 @@ table#foodlist_table {margin-top: 20px; width: 70%; font-family: 'Segoe UI', Tah
 
 <!-- Horizontal Navbar -->
 <ul>
-    <li><a href="./">Home</a></li>
+    <li><a class="active" href="./">Home</a></li>
     <li><a href="about">About <%=shopName%></a></li>
     <li></li>
     <li class="dropdown">
-        <a class="active" href="javascript:void(0)" class="dropbtn">Food</a>
+        <a href="javascript:void(0)" class="dropbtn">Food</a>
         <div class="dropdown-content">
         <a href="foodsearch">Search for Foods</a>
         <a href="foodadd">Add Food</a>
         <a href="foodlist">List Foods</a>
         <a href="foodupdate">Update Foods</a>
+        <a href="fooddelete">Delete Foods</a>
         <a href="foodhighprotein">High Protein Foods</a>
     <li class="dropdown">
         <a href="javascript:void(0)" class="dropbtn">Users</a>
@@ -36,6 +37,7 @@ table#foodlist_table {margin-top: 20px; width: 70%; font-family: 'Segoe UI', Tah
         <a href="login">Login</a>
         <a href="logout">Logout</a>
     <li><a href="register">Register with us</a></li>
+    <li><a href="api">API</a></li>
     </ul>
     <!-- Horizontal Navbar -->
     
@@ -53,9 +55,7 @@ table#foodlist_table {margin-top: 20px; width: 70%; font-family: 'Segoe UI', Tah
             <th>Protein</th>
             <th>Salt</th>
             <th>Sugar</th>
-            <th>Add to Meal</th>
             <th>Update</th>
-            <th>Delete</th>
         </tr>
         <% availableFoods.forEach(function(food) { %>
             <tr style="text-align: center;">
@@ -67,9 +67,7 @@ table#foodlist_table {margin-top: 20px; width: 70%; font-family: 'Segoe UI', Tah
             <td><input id="protein" type="text" name="protein" value="<%= food.Protein %>" required/></td>
             <td><input id="salt" type="text" name="salt" value="<%= food.Salt %>" required/></td>
             <td><input id="sugar" type="text" name="sugar" value="<%= food.Sugar %>" required/></td>
-            <td><input type="checkbox" id="addToMeal" value="Add"></td>
-            <td><button>Edit</button></td>
-            <td><button>Delete</button></td>
+            <td><button>Update</button></td>
             <% }) %>
         </tr>
     </table>

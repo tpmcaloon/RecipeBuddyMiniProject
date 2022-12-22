@@ -75,6 +75,26 @@ module.exports = function(app, shopData) {
         });
     });
     
+    //Delete Users Page ----------------------------------------------------------------------------------------------------------
+    app.get('/fooddelete', redirectLogin, function (req,res) {
+        res.render('fooddelete.ejs', shopData);                                                                     
+    });
+    app.post('/fooddeleted', function (req,res) {
+        //SQL to delete Food
+        let deleteFoodSQL = "DELETE FROM foods WHERE FoodName = '" + req.sanitize(req.body.foodname) + "'";
+        console.log(deleteFoodSQL)
+        db.query(deleteFoodSQL, (err, result) => {
+            if (err) {
+                // TODO: Handle error
+                console.log('SQL Query Error')
+            }
+            let deletefood = result
+                console.log(deletefood)
+                res.send('Food: (' + req.sanitize(req.body.foodname) + ') was successfully deleted. <a href='+'./'+'>Home</a>');
+                console.log('Food Delete Successful');
+            });
+        });
+    
     //Register + Registered Page -----------------------------------------------------------------------
     app.get('/register',function(req, res) {
         res.render('register.ejs', shopData)
@@ -116,7 +136,8 @@ module.exports = function(app, shopData) {
         
     //List Foods Page -----------------------------------------------------------------------
     app.get('/foodlist', function(req, res) {
-        let sqlquery = "SELECT Foods.FoodName, Foods.TypicalValuesPer, Foods.UnitOfTheTypicalValue, Foods.Carbs, Foods.Fat, Foods.Protein, Foods.Salt, Foods.Sugar, Users.Username FROM users INNER JOIN foods ON Users.UserID=Foods.FoodID;"; // query database to get all the Foods + User
+        let sqlquery = "SELECT Foods.FoodName, Foods.TypicalValuesPer, Foods.UnitOfTheTypicalValue, Foods.Carbs, Foods.Fat, Foods.Protein, Foods.Salt, Foods.Sugar, Users.Username FROM Foods INNER JOIN Users ON Foods.foodid=foods.foodid;"; // query database to get all the Foods + User
+        // let sqlquery = "SELECT FoodName, TypicalValuesPer, UnitOfTheTypicalValue, Carbs, Fat, Protein, Salt, Sugar From foods;"; // query database to get all the Foods
         // execute sql query
         db.query(sqlquery, (err, result) => {
             if (err) {
@@ -154,9 +175,9 @@ module.exports = function(app, shopData) {
         db.query(userquery, (err, result) => {
             let userID = result[0].UserID;
         
-        let sqlquery = "INSERT INTO foods (FoodName, TypicalValuesPer, UnitOfTheTypicalValue, Carbs, Fat, Protein, Salt, Sugar, UserID) VALUES (?,?,?,?,?,?,?,?,?)";
+        let sqlquery = "INSERT INTO foods (FoodName, TypicalValuesPer, UnitOfTheTypicalValue, Carbs, Fat, Protein, Salt, Sugar) VALUES (?,?,?,?,?,?,?,?)";
         // execute sql query
-        let newrecord = [req.sanitize(req.body.name), req.sanitize(req.body.typicalvaluesper), req.sanitize(req.body.unitofthetypicalvalue), req.sanitize(req.body.carbs), req.sanitize(req.body.fat), req.sanitize(req.body.protein), req.sanitize(req.body.salt), req.sanitize(req.body.sugar), userID];
+        let newrecord = [req.sanitize(req.body.name), req.sanitize(req.body.typicalvaluesper), req.sanitize(req.body.unitofthetypicalvalue), req.sanitize(req.body.carbs), req.sanitize(req.body.fat), req.sanitize(req.body.protein), req.sanitize(req.body.salt), req.sanitize(req.body.sugar)];
         db.query(sqlquery, newrecord, (err, result) => {
             if (err) {
                 return console.error(err.message);
@@ -175,7 +196,6 @@ module.exports = function(app, shopData) {
         });
     });
 })
-
 
     //High Protein Foods Page -----------------------------------------------------------------------
     app.get('/foodhighprotein', redirectLogin, function(req, res) {
