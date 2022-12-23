@@ -136,8 +136,7 @@ module.exports = function(app, shopData) {
         
     //List Foods Page -----------------------------------------------------------------------
     app.get('/foodlist', function(req, res) {
-        let sqlquery = "SELECT Foods.FoodName, Foods.TypicalValuesPer, Foods.UnitOfTheTypicalValue, Foods.Carbs, Foods.Fat, Foods.Protein, Foods.Salt, Foods.Sugar, Users.Username FROM Foods INNER JOIN Users ON Foods.foodid=foods.foodid;"; // query database to get all the Foods + User
-        // let sqlquery = "SELECT FoodName, TypicalValuesPer, UnitOfTheTypicalValue, Carbs, Fat, Protein, Salt, Sugar From foods;"; // query database to get all the Foods
+        let sqlquery = "SELECT Foods.FoodName, Foods.TypicalValuesPer, Foods.UnitOfTheTypicalValue, Foods.Carbs, Foods.Fat, Foods.Protein, Foods.Salt, Foods.Sugar, Users.Username FROM Users INNER JOIN Foods ON Users.UserID=Foods.UserID;"; // query database to get all the Foods + User
         // execute sql query
         db.query(sqlquery, (err, result) => {
             if (err) {
@@ -174,10 +173,10 @@ module.exports = function(app, shopData) {
         let userquery = "Select UserID From Users";
         db.query(userquery, (err, result) => {
             let userID = result[0].UserID;
-        
-        let sqlquery = "INSERT INTO foods (FoodName, TypicalValuesPer, UnitOfTheTypicalValue, Carbs, Fat, Protein, Salt, Sugar) VALUES (?,?,?,?,?,?,?,?)";
-        // execute sql query
-        let newrecord = [req.sanitize(req.body.name), req.sanitize(req.body.typicalvaluesper), req.sanitize(req.body.unitofthetypicalvalue), req.sanitize(req.body.carbs), req.sanitize(req.body.fat), req.sanitize(req.body.protein), req.sanitize(req.body.salt), req.sanitize(req.body.sugar)];
+            console.log(userID);
+            let sqlquery = "INSERT INTO foods (FoodName, TypicalValuesPer, UnitOfTheTypicalValue, Carbs, Fat, Protein, Salt, Sugar, UserID) VALUES (?,?,?,?,?,?,?,?,?)";
+            // execute sql query
+        let newrecord = [req.sanitize(req.body.name), req.sanitize(req.body.typicalvaluesper), req.sanitize(req.body.unitofthetypicalvalue), req.sanitize(req.body.carbs), req.sanitize(req.body.fat), req.sanitize(req.body.protein), req.sanitize(req.body.salt), req.sanitize(req.body.sugar), userID];
         db.query(sqlquery, newrecord, (err, result) => {
             if (err) {
                 return console.error(err.message);
