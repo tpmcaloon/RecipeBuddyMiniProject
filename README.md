@@ -9,30 +9,17 @@ In my Recipe Buddy I have implemented the following feaures:
 - About page that displays information about the web application including my name as the developer and a navigation bar that contains links to other pages.
 (about.ejs)
 
-- Register page that displays a form for users to add a new user to the database. The form contains the following items: first name, last name, email address, username, and password. Also a navigation bar that contains links to other pages is displayed.
+- Register page that displays a form for users to add a new user to the database. The form contains the following items: first name, last name, email address, username, and password. Also a navigation bar that contains links to other pages is displayed. The password is hashed when stored and a message is displayed indicating that add operation has been done.
 (register.ejs)
 
-R3B:  Collect form data to be passed to the back-end (database) and store user data in the database. Each user data consists of the following fields: first name, last name, email address, username and password. To provide security of data in storage, a hashed password should only be saved in the database, not a plain password.
+- Login page that displays a form for users to login using their username and password. Users are logged in if and only if both username and password are correct and a message is displayed indicating whether login is successful or not and why not successful.
+(login.ejs)
 
-R3C: Display a message indicating that add operation has been done.
+- Logout - There is a way to logout, a message is displayed upon successful logout.
 
-- Login page:
+- Add food page (only available to logged-in users) that displays a form for users to add a new food item to the database. 
 
-R4A: Display a form to users to log in to the dynamic web application. The form should consist of the following items: username and password.  Display a link to the home page or a navigation bar that contains links to other pages.
-
-R4B: Collect form data to be checked against data stored for each registered user in the database. Users are logged in if and only if both username and password are correct. 
-
-R4C: Display a message indicating whether login is successful or not and why not successful.
-
-= Logout
-
-There is a way to logout, a message is displayed upon successful logout.
-
-= Add food page (only available to logged-in users):
-
-R6A: Display a form to users to add a new food item to the database. 
-
-Here is an example of a food item, showing the fields that should be on the form and example values:
+The following are in the form:
 
 Name: flour
 Typical values per:100
@@ -43,16 +30,10 @@ Protein: 9.1 g
 Salt: 0.01 g
 Sugar: 0.6 g
 
-This is saying that 100 grams of flour has 81g carbs, 1.4g fats, etc.  The unit of the typical value could also be things like litre, tablespoon, cup, etc.
-Display a link to the home page or a navigation bar that contains links to other pages.
+The inputs are stored in the database upon submission. I have also saved the username of the user who has added this food item to the database.
+(foodadd.ejs)
 
-R6B:  Collect form data to be passed to the back-end (database) and store food items in the database. 
-
-Going beyond by saving the username of the user who has added this food item to the database. [3 marks]
-
-R6C: Display a message indicating that add operation has been done.
-
-= Search food page 
+- Search food page 
 
 R7A: Display a form to users to search for a food item in the database. 'The form should contain just one field - to input the name of the food item'. Display a link to the home page or a navigation bar that contains links to other pages.
 
@@ -80,12 +61,8 @@ R8B: You can gain more marks for your list page is organised in a tabular format
 
 R9C: going beyond by letting users select some food items (e.g. by displaying a checkbox next to each food item and letting the user input the amount of each food item in the recipe e.g. 2x100 g flour). Then collect the name of all selected foods and calculate the sum of the nutritional information related to all selected food items for a recipe or a meal and display them as ‘nutritional information of a recipe or a meal’. Please note, it is not necessary to store recipes or meals in the database. [6.5 marks]
 
-= API
+- API
 There is a basic API displayed on '/api' route listing all foods stored in the database in JSON format. i.e. food content can also be accessed as JSON via HTTP method, It should be clear how to access the API (this could include comments in code). Additional credit will be given for an API that implements get, post, put and delete.
 
-R11: form validation
-All form data should have validations, examples include checking password length, email validation, integer data is integer and etc. 
-
-R12: Your dynamic web application must be implemented in Node.js on your virtual server. The back-end of the web application could be MongoDB or MySQL. Make sure you have included comments in your code explaining all sections of the code including database interactions.
-
+Recipe Buddy ERD
 ![Alt text](/documentation/ERD.png "Recipe Buddy ERD")
