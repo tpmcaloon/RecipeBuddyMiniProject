@@ -136,7 +136,7 @@ module.exports = function(app, shopData) {
         
     //List Foods Page -----------------------------------------------------------------------
     app.get('/foodlist', function(req, res) {
-        let sqlquery = "SELECT Foods.FoodName, Foods.TypicalValuesPer, Foods.UnitOfTheTypicalValue, Foods.Carbs, Foods.Fat, Foods.Protein, Foods.Salt, Foods.Sugar, Users.Username FROM Users INNER JOIN Foods ON Users.UserID=Foods.UserID;"; // query database to get all the Foods + User
+        let sqlquery = "SELECT foods.FoodName, foods.TypicalValuesPer, foods.UnitOfTheTypicalValue, foods.Carbs, foods.Fat, foods.Protein, foods.Salt, foods.Sugar, users.Username FROM users INNER JOIN foods ON users.UserID=foods.UserID;;"; // query database to get all the Foods + User
         // execute sql query
         db.query(sqlquery, (err, result) => {
             if (err) {
@@ -170,7 +170,7 @@ module.exports = function(app, shopData) {
     });
     app.post('/foodadded', function (req,res) {
         // saving data in database
-        let userquery = "Select UserID From Users";
+        let userquery = "Select UserID From users";
         db.query(userquery, (err, result) => {
             let userID = result[0].UserID;
             console.log(userID);
