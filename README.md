@@ -38,8 +38,10 @@ Sugar: 0.6 g
 (fooddelete.ejs)
 
 - List food page (available to all users) displays all fields for all foods stored in the database. The data is organised in a tabular format instead of a simple list. I have included the checkbox to add food item to meal, however, this is only visual.
+(foodlist.ejs)
 
 - API that can be accessed through the naavigation bar
+(main.js Lines 305 - 330)
 
 Recipe Buddy ERD
 ![Alt text](/documentation/ERD.png "Recipe Buddy ERD")
