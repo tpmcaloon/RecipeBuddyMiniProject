@@ -40,8 +40,31 @@ Sugar: 0.6 g
 - List food page (available to all users) displays all fields for all foods stored in the database. The data is organised in a tabular format instead of a simple list. I have included the checkbox to add food item to meal, however, this is only visual.
 (foodlist.ejs)
 
+- High Protein Foods shows food with over 10g of Protein in tabular format
+(foodhighprotein.ejs)
+
+- List Users Displays all the users of Recipe Buddy
+(userlist.ejs)
+
+- Delete Users allows users to remove other users
+(userdelete.ejs)
+
 - API that can be accessed through the naavigation bar
 (main.js Lines 305 - 330)
 
 Recipe Buddy ERD
 ![Alt text](/documentation/ERD.png "Recipe Buddy ERD")
+
+- Issues using the virtual server - When uploading the web app to the virtual server, the navigation bar is off. I was unable to find a solution to this. Below are screenshots of how the application looks on local machines.
+
+![Alt text](/documentation/Home.png "Recipe Buddy Home")
+![Alt text](/documentation/About.png "Recipe Buddy About")
+![Alt text](/documentation/AddFood.png "Recipe Buddy Add Food")
+![Alt text](/documentation/DeleteFood.png "Recipe Buddy Delete Food")
+![Alt text](/documentation/DeleteUser.png "Recipe Buddy Delete User")
+![Alt text](/documentation/earchFood.png "Recipe Buddy Search Food")
+![Alt text](/documentation/ListFood.png "Recipe Buddy List Food")
+![Alt text](/documentation/ListUser.png "Recipe Buddy List User")
+![Alt text](/documentation/Login.png "Recipe Buddy Login")
+![Alt text](/documentation/Register.png "Recipe Buddy Register")
+![Alt text](/documentation/UpdateFood.png "Recipe Buddy Update Food")
